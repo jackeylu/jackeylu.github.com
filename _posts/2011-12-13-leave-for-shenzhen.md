@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title: 开始新生活
 category : personal
 tags : [life, personal]
