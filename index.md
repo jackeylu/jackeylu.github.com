@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  
+title:  Jackey Lyu 的网络日志
 ---
 {% include JB/setup %}
 
