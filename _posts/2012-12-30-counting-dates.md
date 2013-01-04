@@ -2,7 +2,7 @@
 layout: post
 title: 新年倒计时
 category : personal
-tags : [life, personal,2013]
+tags : [life, personal, 2013]
 ---
 {% include JB/setup %}
 
