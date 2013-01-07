@@ -4,7 +4,6 @@ title:  Jackey Lyu 的网络日志
 ---
 {% include JB/setup %}
 
-Here's a sample "posts list".
 
 <ul class="posts">
   {% for post in site.posts %}
