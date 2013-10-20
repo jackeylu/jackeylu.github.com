@@ -1,21 +1,21 @@
-title:            Sunus & Code
-description:      My blog for coding.
-disqus_shortname: sunusblog
+title:            Jackey Lyu's Blog 
+description:      Writing for something
+disqus_shortname: jackeylyu
 #Comment out url when working locally to resolve base urls correctly
-url:              http://sunuslee.github.io
+#url:              http://sunuslee.github.io
 
 # Owner/author information
 owner:
-  name:           Sunus lee
+  name:           Jackey Lyu
   avatar:         avatar.jpg
-  bio:            "I am sunus and I love to code:)"
-  email:          sunus.the.dev@gmail.com
+  bio:            "I am J, and I love to code:)"
+  email:          lvlin.china@gmail.com
   # Social networking links used in footer. Update and remove as you like.
-  twitter: sunuslee       
-  facebook:       
-  github: sunuslee        
+  twitter: JackeyLv
+  facebook: LinLv       
+  github: Jackeylu        
   stackexchange:  
-  linkedin:       
+  linkedin:        
   instagram:      
   flickr:         
   tumblr:         
@@ -42,7 +42,8 @@ timezone:    America/New_York
 future:      true
 
 # https://github.com/mojombo/jekyll/wiki/Permalinks
-permalink:   /:categories/:title
+# permalink:   /:categories/:title
+permalink: /:categories/:year/:month/:day/:title
 
 # Amount of post to show on home page
 paginate: 5
@@ -67,4 +68,4 @@ exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.
 
 code_dir: ./codes
 plugins: plugins
-pygments: true # default python pygments have been replaced by pygments.rb
+pygments: false  # default python pygments have been replaced by pygments.rb
