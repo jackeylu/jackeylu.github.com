@@ -8,7 +8,7 @@ disqus_shortname: jackeylyu
 owner:
   name:           Jackey Lyu
   avatar:         avatar.jpg
-  bio:            "I am J, and I love to code:)"
+  bio:            "I am J, and I love coding for interesting things."
   email:          lvlin.china@gmail.com
   # Social networking links used in footer. Update and remove as you like.
   twitter: JackeyLv
@@ -69,3 +69,6 @@ exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.
 code_dir: ./codes
 plugins: plugins
 pygments: false  # default python pygments have been replaced by pygments.rb
+#img_url : http://localhost:4000/assets/images/
+img_url : http://jackeylu.github.io/assets/images/
+
