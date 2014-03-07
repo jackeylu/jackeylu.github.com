@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "An interesting macro"
-description: ""
-category: 
-tags: []
+categories:
+- Programming
+tags: 
+- macro leveldb
+
 ---
 
 LevelDB[#leveldb]的源码中有一个辅助测试的宏，非常有趣。摘录如下。
@@ -20,6 +22,3 @@ LevelDB[#leveldb]的源码中有一个辅助测试的宏，非常有趣。摘录
 忽略其中的细节，可以从简化的图中看到
 ![]({{ site.img_url }}real-macro-code-2.png)。
 
-
-
-{% include JB/setup %}

@@ -1,10 +1,12 @@
 ---
 layout: post
 title: 新年倒计时
-category : personal
-tags : [life, personal, 2013]
+categories:
+- personal
+tags:
+- life, personal, 2013
+
 ---
-{% include JB/setup %}
 
 2012年12月30日，深圳
 

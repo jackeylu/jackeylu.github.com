@@ -1,10 +1,11 @@
 ---
-layout: default
+layout: post
 title: 开始新生活
-category : personal
-tags : [life, personal]
+categories:
+- personal 
+tags : 
+
 ---
-{% include JB/setup %}
 
 
 上午，谭老师说有实验室有几个人要来送我，我很感激，很感动。
