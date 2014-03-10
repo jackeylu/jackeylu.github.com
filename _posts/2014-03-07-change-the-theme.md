@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Change the theme"
+title: "Changed the theme"
 categories: 
 - blog
 tags: 
