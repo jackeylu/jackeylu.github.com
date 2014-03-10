@@ -1,0 +1,124 @@
+---
+layout: post
+title: 《软件调试的艺术》学习笔记——GDB使用技巧摘要(4)——Pthread线程调试
+categories: []
+tags:
+- 编程
+- gdb
+- GNU/Linux
+- pthreads
+- tool utils
+status: publish
+type: post
+published: true
+meta: {}
+---
+<p>Unix下最普遍的线程包是POSIX标准的Pthreads。Pthreads使用的抢占式线程管理策略，程序中的一个线程可能在任何时候被另一个线程中断。所以，使用Pthreads开发的应用程序有些错误不太容易重现。</p> <p>GDB线程相关命令汇总</p> <ul> <li>info threads 给出关于当前所有线程的信息</li> <li>thread n 改为线程n，或者说是进入线程n的栈中进行观察</li> <li>break line_num thread n 表示当线程n到达源码行line_num时停止执行</li> <li>break line_num thread n if expression 上一命令增加条件断点而已</li> </ul> <p>加入怀疑线程之间有死锁，可以用gdb进行调试定位。流程大致是：</p> <ol> <li>用gdb启动或者插入待调试程序</li> <li>当程序挂起时候，通过按下Ctrl+C组合键中断它；</li> <li>这个时候用info threads查看所有线程都在干嘛，然后找到自己的工作线程（注意排除main线程和pthreads的管理线程）</li> <li>分别查看自己的工作线程在干嘛，用bt(backtrace)查看对应的帧，记得用thread n切换进入对应线程的帧</li> <li>关注像__pthread_wait_for_restart_signal()和lock等函数，如果有源码的话，会比较方便地定位到具体的问题代码位置</li> </ol> <p>下面是一个简单的例子。如果在worker线程里面，上锁和解锁没有匹配，则会发生死锁</p> 
+<pre>
+<span class="Comment">// finds the primes between 2 and n; uses the Sieve of Eratosthenes,</span>
+<span class="Comment">// deleting all multiples of 2, all multiples of 3, all multiples of 5,</span>
+<span class="Comment">// etc.; not efficient, e.g. each thread should do deleting for a whole</span>
+<span class="Comment">// block of values of base before going to nextbase for more </span>
+
+<span class="Comment">// usage:  sieve nthreads n</span>
+<span class="Comment">// where nthreads is the number of worker threads</span>
+
+<span class="PreProc">#include </span>     <span class="Constant">&lt;stdio.h&gt;</span>
+<span class="PreProc">#include </span>     <span class="Constant">&lt;math.h&gt;</span>
+<span class="PreProc">#include </span>     <span class="Constant">&lt;pthread.h&gt;</span>
+
+<span class="PreProc">#define MAX_N </span>    <span class="Constant">100000000</span>
+<span class="PreProc">#define MAX_THREADS </span> <span class="Constant">100</span>
+
+<span class="Comment">// shared variables</span>
+<span class="Type">int</span> nthreads,  <span class="Comment">// number of threads (not counting main())</span>
+    n,  <span class="Comment">// upper bound of range in which to find primes</span>
+    prime[MAX_N+<span class="Constant">1</span>],  <span class="Comment">// in the end, prime[i] = 1 if i prime, else 0</span>
+    nextbase;  <span class="Comment">// next sieve multiplier to be used</span>
+
+<span class="Type">int</span> work[MAX_THREADS];  <span class="Comment">// to measure how much work each thread does,</span>
+                        <span class="Comment">// in terms of number of sieve multipliers checked</span>
+
+<span class="Comment">// lock index for the shared variable nextbase</span>
+pthread_mutex_t nextbaselock = PTHREAD_MUTEX_INITIALIZER;
+
+<span class="Comment">// ID structs for the threads</span>
+pthread_t id[MAX_THREADS];
+
+<span class="Comment">// "crosses out" all multiples of k, from k*k on</span>
+<span class="Type">void</span> crossout(<span class="Type">int</span> k)
+{  <span class="Type">int</span> i;
+
+   <span class="Statement">for</span> (i = k; i*k &lt;= n; i++)  {
+      prime[i*k] = <span class="Constant">0</span>;
+   }
+}
+
+<span class="Comment">// worker thread routine</span>
+<span class="Type">void</span> *worker(<span class="Type">int</span> tn)  <span class="Comment">// tn is the thread number (0,1,...)</span>
+{  <span class="Type">int</span> lim,base;
+
+   <span class="Comment">// no need to check multipliers bigger than sqrt(n)</span>
+   lim = sqrt(n);
+
+   <span class="Statement">do</span>  {
+      <span class="Comment">// get next sieve multiplier, avoiding duplication across threads</span>
+      <span style="color:#ff0000;">pthread_mutex_lock(&amp;nextbaselock);</span>
+      <span style="color:#ff0000;">base = nextbase += 2</span>; 
+      <span style="color:#ff0000;">pthread_mutex_unlock(&amp;nextbaselock);</span> 
+
+         <span class="Statement">if</span> (base &lt;= lim)  {
+         work[tn]++;  <span class="Comment">// log work done by this thread</span>
+         <span class="Comment">// don't bother with crossing out if base is known to be</span>
+         <span class="Comment">// composite</span>
+         <span class="Statement">if</span> (prime[base])
+            crossout(base);
+      }
+      <span class="Statement">else</span> <span class="Statement">return</span>;
+   } <span class="Statement">while</span> (<span class="Constant">1</span>);
+}
+
+main(<span class="Type">int</span> argc, <span class="Type">char</span> **argv)
+{  <span class="Type">int</span> nprimes,  <span class="Comment">// number of primes found </span>
+       totwork,  <span class="Comment">// number of base values checked</span>
+       i;
+   <span class="Type">void</span> *p;
+
+   n = atoi(argv[<span class="Constant">1</span>]);
+   nthreads = atoi(argv[<span class="Constant">2</span>]);
+   <span class="Statement">for</span> (i = <span class="Constant">2</span>; i &lt;= n; i++)
+      prime[i] = <span class="Constant">1</span>;
+   crossout(<span class="Constant">2</span>);
+   nextbase = <span class="Constant">1</span>;
+   <span class="Comment">// get threads started</span>
+   <span class="Statement">for</span> (i = <span class="Constant">0</span>; i &lt; nthreads; i++)  {
+      pthread_create(&amp;id[i],<span class="Constant">NULL</span>,(<span class="Type">void</span> *) worker,(<span class="Type">void</span> *) i);
+   }
+
+   <span class="Comment">// wait for all done</span>
+   totwork = <span class="Constant">0</span>;
+   <span class="Statement">for</span> (i = <span class="Constant">0</span>; i &lt; nthreads; i++)  {
+      pthread_join(id[i],&amp;p);
+      printf(<span class="Constant">"</span> <span class="Special">%d</span>
+          <span class="Constant"> values of base done</span>
+          <span class="Special">\n</span>
+          <span class="Constant">"</span>,work[i]);
+      totwork += work[i];
+   }
+   printf(<span class="Constant">"</span>
+          <span class="Special">%d </span>
+          <span class="Constant">total values of base done</span>
+          <span class="Special">\n</span>
+          <span class="Constant">"</span>,totwork);
+
+   <span class="Comment">// report results</span>
+   nprimes = <span class="Constant">0</span>;
+   <span class="Statement">for</span> (i = <span class="Constant">2</span>; i &lt;= n; i++)
+      <span class="Statement">if</span> (prime[i]) nprimes++;
+   printf(<span class="Constant">"the number of primes found was</span> <span class="Special">%d</span>
+          <span class="Special">\n</span>
+          <span class="Constant">"</span>,nprimes);
+
+}
+</pre>
+ <!--more-->

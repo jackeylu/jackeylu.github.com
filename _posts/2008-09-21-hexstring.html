@@ -1,0 +1,15 @@
+---
+layout: post
+title: ! '>HexString'
+categories: []
+tags:
+- tool utils
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: jmp-eax.blogspot.com
+  blogger_author: JMP
+  blogger_250ca80ed681db3745a15b2b9f221f45_permalink: '974926874934409841'
+---
+&gt;<pre class="prettyprint"><br />/**<br />* File: hexstring.c<br />* Author: Lvlin<br />* Date: 星期日, 九月 21 2008<br />* Abstract: get the C pattern string for inputs<br />*         <br />*/<br />#include &lt;stdlib.h&gt;<br />#include &lt;stdio.h&gt;<br /><br />int main(int argc, char * argv[])<br />{<br />       char c=0;<br />       while(EOF != scanf("%c",&amp;c))<br />       {<br />               if('\n' == c)<br />                       // ignore the input of carry,<br />                       // print it directly<br />                       printf("\n");<br />               else<br />                       // &amp; 0xFF to keep the only low 8 bits<br />                       printf("\\x%x",c &amp; 0xFF);<br />       }<br />       printf("Done!\n");<br />       return 0;<br />}<br /><br /></pre>

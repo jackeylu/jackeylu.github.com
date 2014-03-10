@@ -1,0 +1,106 @@
+---
+layout: post
+title: ! '[转载]编写一段程序判断系统中的CPU 是Little endian 还是Big endian 模式'
+categories: []
+tags:
+- 编程
+- technology
+status: publish
+type: post
+published: true
+meta:
+  tagazine-media: a:7:{s:7:"primary";s:0:"";s:6:"images";a:0:{}s:6:"videos";a:0:{}s:11:"image_count";s:1:"0";s:6:"author";s:8:"20812648";s:7:"blog_id";s:8:"20228274";s:9:"mod_stamp";s:19:"2011-02-20
+    12:19:49";}
+  blogger_blog: jmp-eax.blogspot.com
+  blogger_author: JMP
+  blogger_250ca80ed681db3745a15b2b9f221f45_permalink: '6204865654293600931'
+---
+&gt;试 题一：编写一段程序判断系统中的CPU 是Little endian 还是Big endian 模式？
+分析：
+作为一个计算机相关专业 的人，我们应该在计算机组成中都学习过什么叫Little endian 和Big endian。Little
+endian 和Big endian 是CPU 存放数据的两种不同顺序。对于整型、长整型等数据类型，Big endian 认为第
+一个字节是最高位字节（按照从低地 址到高地址的顺序存放数据的高位字节到低位字节）；而Little endian 则
+相反，它认为第一个字节是最低位字节（按照从低地址到高地址 的顺序存放数据的低位字节到高位字节）。
+例如，假设从内存地址0x0000 开始有以下数据：
+0x0000 0x0001 0x0002 0x0003
+0x12 0x34 0xab 0xcd
+如果我们去读取一个地址为0x0000 的四个字节变量，若字节序为big-endian，则读出结果为0x1234abcd；
+若字节序位little-endian，则读出结果为 0xcdab3412。如果我们将0x1234abcd 写入到以0x0000 开始的
+内存中，则Little endian 和Big endian 模式的存放结果如下：
+地址 0x0000 0x0001 0x0002 0x0003
+big-endian 0x12 0x34 0xab 0xcd
+little-endian 0xcd 0xab 0x34 0x12
+一般来说，x86 系列CPU 都是little-endian 的字节序，PowerPC 通常是Big endian，还有的CPU 能通过
+跳线来设置CPU 工作于Little endian 还是Big endian 模式。
+解答：
+显然，解答这个问题的方法只能是将一个字节 （CHAR/BYTE 类型）的数据和一个整型数据存放于同样的内存
+开始地址，通过读取整型数据，分析CHAR/BYTE 数据在整型数据的高位还是低位来判断CPU 工作于Little
+endian 还是Big endian 模式。得出如下的答案：
+typedef unsigned char BYTE;
+int main(int argc, char* argv[])
+{
+unsigned int num,*p;
+p = &amp;num;
+num = 0;
+*(BYTE *)p = 0xff;
+if(num == 0xff)
+{
+printf("The endian of cpu is little\n");
+}
+else //num == 0xff000000
+{
+printf("The endian of cpu is big\n");
+}
+return 0;
+}
+除了上述方法(通过指针类型强制转换并对整型数据首字节赋值，判断该赋值赋给了高位还是低位)外，还有没
+有更好的办法 呢？我们知道，union 的成员本身就被存放在相同的内存空间（共享内存，正是union 发挥作用、
+做贡献的去处），因此，我们可以将一个 CHAR/BYTE 数据和一个整型数据同时作为一个union 的成员，得出
+如下答案：
+int checkCPU()
+{
+{
+union w
+{
+int a;
+char b;
+} c;
+c.a = 1;
+return (c.b == 1);
+}
+}
+实 现同样的功能，我们来看看Linux 操作系统中相关的源代码是怎么做的：
+static union { char c[4]; unsigned long l; } endian_test = { { 'l', '?', '?', 'b' } };
+
+#define ENDIANNESS ((char)endian_test.l)
+Linux 的内核作者们仅仅用一个union 变量和一个简单的宏定义就实现了一大段代码同样的功能！由以上一段
+代码我们可以深刻领会到Linux 源代码的精妙之处！(如果ENDIANNESS='l'表示系统为little endian,
+为'b'表示big endian )
+试 题二：假设网络节点A 和网络节点B 中的通信协议涉及四类报文，报文格式为"报文类型字段+报文内容的结
+构体"，四个报文内容的结构体类型分别 为STRUCTTYPE1~ STRUCTTYPE4，请编写程序以最简单的方式组
+织一个统一的报文数据结构。
+分析：
+报文的格式 为"报文类型+报文内容的结构体"，在真实的通信中，每次只能发四类报文中的一种，我们可以将四
+类报文的结构体组织为一个union（共享一段内 存，但每次有效的只是一种），然后和报文类型字段统一组织
+成一个报文数据结构。
+解答：
+根据上述分析，我们很自然地得出如下答案：
+typedef unsigned char BYTE;
+//报文内容联合体
+typedef union tagPacketContent
+{
+STRUCTTYPE1 pkt1;
+STRUCTTYPE2 pkt2;
+STRUCTTYPE3 pkt1;
+STRUCTTYPE4 pkt2;
+}PacketContent;
+// 统一的报文数据结构
+typedef struct tagPacket
+{
+BYTE pktType;
+PacketContent pktContent;
+}Packet;
+总结
+在C/C++程序的编写中，当多个基本数据类型或复合数据结构要占用同一片内存 时，我们要使用联合体（试题
+一是这样的例证）；当多种类型，多个对象，多个事物只取其一时（我们姑且通俗地称其为"n 选1"），我们也
+可 以使用联合体来发挥其长处（试题二是这样的例证）。<!-- end 02 -->

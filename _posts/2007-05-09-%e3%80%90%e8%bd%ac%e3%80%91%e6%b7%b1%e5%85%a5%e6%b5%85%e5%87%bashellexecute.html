@@ -1,0 +1,15 @@
+---
+layout: post
+title: ! '>【转】深入浅出ShellExecute'
+categories: []
+tags:
+- Uncategorized
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: jmp-eax.blogspot.com
+  blogger_author: JMP
+  blogger_250ca80ed681db3745a15b2b9f221f45_permalink: '9199295510530125507'
+---
+&gt;Q: 如何打开一个应用程序？<br />ShellExecute(this-&gt;m_hWnd,"open","calc.exe","","", SW_SHOW );<br />或<br />ShellExecute(this-&gt;m_hWnd,"open","notepad.exe",<br />    "c:\\MyLog.log","",SW_SHOW );<br />As you can see, I haven't passed the full path of the programs.<br />Q: 如何打开一个同系统程序相关连的文档？<br />ShellExecute(this-&gt;m_hWnd,"open",<br />    "c:\\abc.txt","","",SW_SHOW );<br />Q: 如何打开一个网页？<br />ShellExecute(this-&gt;m_hWnd,"open",<br />    "http://www.google.com","","", SW_SHOW );<br />Q: 如何激活相关程序，发送EMAIL？<br />ShellExecute(this-&gt;m_hWnd,"open",<br />    "mailto:nishinapp@yahoo.com","","", SW_SHOW );<br />Q: 如何用系统打印机打印文档？<br />ShellExecute(this-&gt;m_hWnd,"print",<br />    "c:\\abc.txt","","", SW_HIDE);<br />Q: 如何用系统查找功能来查找指定文件？<br />ShellExecute(m_hWnd,"find","d:\\nish",<br />    NULL,NULL,SW_SHOW);<br />Q: 如何启动一个程序，直到它运行结束？<br />SHELLEXECUTEINFO ShExecInfo = {0};<br />ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);<br />ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;<br />ShExecInfo.hwnd = NULL;<br />ShExecInfo.lpVerb = NULL;<br />ShExecInfo.lpFile = "c:\\MyProgram.exe";            <br />ShExecInfo.lpParameters = "";    <br />ShExecInfo.lpDirectory = NULL;<br />ShExecInfo.nShow = SW_SHOW;<br />ShExecInfo.hInstApp = NULL;      <br />ShellExecuteEx(&amp;ShExecInfo);<br />WaitForSingleObject(ShExecInfo.hProcess,INFINITE);<br />或：<br />PROCESS_INFORMATION ProcessInfo;<br />STARTUPINFO StartupInfo; //This is an [in] parameter<br />ZeroMemory(&amp;StartupInfo, sizeof(StartupInfo));<br />StartupInfo.cb = sizeof StartupInfo ; //Only compulsory field<br />if(CreateProcess("c:\\winnt\\notepad.exe", NULL,<br />    NULL,NULL,FALSE,0,NULL,<br />    NULL,&amp;StartupInfo,&amp;ProcessInfo))<br />{<br />    WaitForSingleObject(ProcessInfo.hProcess,INFINITE);<br />    CloseHandle(ProcessInfo.hThread);<br />    CloseHandle(ProcessInfo.hProcess);<br />} <br />else<br />{<br />    MessageBox("The process could not be started...");<br />}<br />Q: 如何显示文件或文件夹的属性？<br />SHELLEXECUTEINFO ShExecInfo ={0};<br />ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);<br />ShExecInfo.fMask = SEE_MASK_INVOKEIDLIST ;<br />ShExecInfo.hwnd = NULL;<br />ShExecInfo.lpVerb = "properties";<br />ShExecInfo.lpFile = "c:\\"; //can be a file as well<br />ShExecInfo.lpParameters = "";<br />ShExecInfo.lpDirectory = NULL;<br />ShExecInfo.nShow = SW_SHOW;<br />ShExecInfo.hInstApp = NULL;<br />ShellExecuteEx(&amp;ShExecInfo);<br /><br />有些有问题，比如Q: 如何用系统查找功能来查找指定文件？

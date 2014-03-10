@@ -1,0 +1,29 @@
+---
+layout: post
+title: cygwin中直接打开windows文件或文件夹的方式
+categories: []
+tags: []
+status: publish
+type: post
+published: true
+meta: {}
+---
+在cygwin中提供了cygstart工具和命令，可以方便地调用windows下默认的操作模式 打开一个文件或文件夹。
+
+<blockquote> cygstart - start a program or open a file or URL
+
+</blockquote>
+
+例如，我喜欢使用在windows下使用bash终端，那么cygwin是一种不错的选择； 另外，我希望在终端中进行操作的时候，能够用gvim来编辑文件，例如markdown文件。
+
+那么，如果我在windows的markdown文件默认打开方式指定为gvim，那么对于一个markdown文件， 我仅需如此，即可直接用gvim打开。
+
+<blockquote> cygstart xxx.md
+
+</blockquote>
+
+这里假设xxx.md是要打开的markdown文件。
+
+我觉得这是一种兼顾效率和喜好的良好方法。当然，最好的方式还是直接用一个合适的Linux发行版本。 而我现在缺乏时间去调教出一个适合自己的Linux发行版本，那么这种cygwin的方式还是不错。
+
+BTW，cygwin称cyg*等一系列命令和工具为cygutils，这真是太方便。

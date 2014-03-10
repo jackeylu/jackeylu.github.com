@@ -1,0 +1,72 @@
+---
+layout: post
+title: 《软件调试的艺术》学习笔记——GDB使用技巧摘要(1)
+categories: []
+tags:
+- 编程
+- GNU/Linux
+- technology
+- tool utils
+status: publish
+type: post
+published: true
+meta:
+  tagazine-media: a:7:{s:7:"primary";s:0:"";s:6:"images";a:0:{}s:6:"videos";a:0:{}s:11:"image_count";s:1:"0";s:6:"author";s:8:"20812648";s:7:"blog_id";s:8:"20228274";s:9:"mod_stamp";s:19:"2011-02-22
+    12:38:18";}
+---
+<span style="widows:2;text-transform:none;text-indent:0;border-collapse:separate;font:medium Arial;white-space:normal;orphans:2;letter-spacing:normal;color:#000000;word-spacing:0;">《软件调试的艺术》，因为名是<em>The Art of Debugging with GDB, DDD, and Eclipse.</em></span> 作者是美国的Norman Matloff和Peter Jay Salzman，中文版由张云翻译。是人邮出版社图灵程序设计丛书初版。
+<div>这里称为"艺术"，个人觉得有点过了，但是其中关于gdb以及在gdb基础之上集成的DDD和Eclipse调试技巧的整理确实是做的很好，对于Linux/开源社区下的开发人员以及其他平台技术gdb调试的开发人员都是很有帮助。毕竟有句话叫做：程序是调出来的，不是写出来的。这句话的意思没有抹杀程序设计思想、框架、优良编码风格的意味，只是谁都知道，软件怎么可能没有bug呢？</div>
+<div>下面是整理的内容：</div>
+<div>（DDD和Eclipse在调试时确实有其独特之处，但是我都没有怎么用过，所以就没有阅读其中的内容，自然也没有整理）</div>
+<ol>
+	<li>调试的原则
+<ol>
+	<li>调试的本质：确认原则</li>
+	<li>其他原则
+<ol>
+	<li>从简单工作开始调试</li>
+	<li>使用自顶向下的方法</li>
+	<li>使用调试工具确定段错误的位置</li>
+	<li>通过发出中断确定无限循环的位置</li>
+	<li>使用二分搜索</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<div>调试的原则是和具体调试工具无关的，是程序员对代码世界的分析、认识的一种方法学和思路，是对程序运行时状态变化作出的一种习惯、相对正确的反应。</div>
+<div><strong>修改充满错误的程序（很多年轻的程序员开始都认为自己的程序是没有错误的，其实很多细节、编码规范都可能存在问题），就是逐个去确认你认为正确的代码确实是正确的。当你发现其中某个假设不成立时，就表示已经找到了关于程序错误所在位置的线索（甚至是错误本身）。</strong>这就是确认原则。</div>
+<div>这里无意讨论基于文本的调试工具和基于GUI的调试工具的差别，应该说两者各有千秋，用在合适的地方就是好，在合适的人手里就是合适的武器。</div>
+<div>值得介绍的是GDB有个-tui选项，和Ctrl+X+A组合键可以在文本模式和TUI模式之间切换。CGDB (<a href="http://cgdb.sf.net">http://cgdb.sf.net</a>) 是对其的一种增强和改善。</div>
+<div><!--more--></div>
+开始介绍GDB的知识点。
+
+要用gdb调试能够有代码显示，必须用-g选项进行编译源码。另外使用gdb的时候，尽量多用tab键。
+<ul>
+	<li>断点</li>
+</ul>
+下断点是break（缩写是b），后面可以接行号（或者文件名:行号）、函数名、内存指令地址；
+
+tbreak是临时断点，有限次数为一次；
+
+对应的高级技巧有条件断点。比如
+
+<code>(gdb) break 30 if num_y == 1</code>
+
+这表示在第三十行下条件断点，条件为num_y==1是中端程序运行
+
+删除断点用delete，禁用/启用断点为disable/enable
+
+到断点了可以step/next/continue等命令执行，还有clear、condition等命令可以使用，多看help
+<ul>
+	<li>观察点</li>
+</ul>
+还可以用观察点来查看变量、内存、表达式的值是否改变，同样可以加条件。多试试就记住了。命令是watch
+<ul>
+	<li>查看变量</li>
+</ul>
+查看变量是print 后面接变量名，也可以是表达式，函数等，灰常强大
+
+调试的时候一般开两个终端，一个是gdb调试终端，一个编辑、编译终端，这样gdb发现问题的时候就不用退出，直接在另外一个终端修改好编译后直接在gdb里面重新ruan程序就行。这样的好处是之前设置的断点、宏等都还存在。
+
+未完待续

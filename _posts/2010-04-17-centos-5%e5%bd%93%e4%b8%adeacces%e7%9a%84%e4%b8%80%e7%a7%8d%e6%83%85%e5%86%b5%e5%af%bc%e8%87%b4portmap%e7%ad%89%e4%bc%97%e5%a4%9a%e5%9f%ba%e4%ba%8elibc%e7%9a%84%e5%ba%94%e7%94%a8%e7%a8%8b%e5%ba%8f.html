@@ -1,0 +1,15 @@
+---
+layout: post
+title: ! '>CentOS 5当中EACCES的一种情况导致portmap等众多基于libc的应用程序无法执行的问题(是selinux配置造成)'
+categories: []
+tags:
+- Uncategorized
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: jmp-eax.blogspot.com
+  blogger_author: JMP
+  blogger_250ca80ed681db3745a15b2b9f221f45_permalink: '8409627294332710863'
+---
+&gt;<div class="gmail_quote"><br><div> <div>昨天突然发现，某一台CentOS服务器不能提供nfs服务了。</div> <div>于是ssh上去</div> <div>#service nfs status</div> <div>stopped</div> <div>#serice nfs start</div> <div>can not use the rpc</div> <div>#service portmap status</div> <div>stopped</div> <div>#service portmap start</div> <div>faint! </div> <div>/lib/libnsl.so.1 no such file or directory</div> <div>可libsnsl这文件确实是存在的。</div> <div>手动执行/sbin/portmap居然也是这个错误。文件确实存在，这时候strace之</div> <div>#strace /sbin/portmap</div> <div>balala一大片</div> <div>仔细查之，发现</div> <div>open(&quot;/lib/libnsl.so.1&quot;,...)=-1 <font color="#ff0000"><b>EACCESS</b></font></div> <div>这怎么可能呢，libnsl链接文件和原文件都是有权限的。</div> <div>很怪。</div> <div>&nbsp;</div> <div>这时候继续看日志，tail /var/log/message</div> <div>my god，日志既然停了，6天前就不在记录日志了。停止的时候是6天前的凌晨4点多。</div> <div>非常奇怪。</div> <div>&nbsp;</div> <div>#service syslog start</div> <div>shit, /lib/libc.so.6 EACCES</div> <div>这下大条了，以前从没有遇到这样的问题，</div> <div>再仔细一查，很多系统服务都没有办法启动。</div> <div>&nbsp;</div> <div>没辙啊没辙，Google 百度都不行。都没有找到类似的情况。</div> <div>&nbsp;</div> <div>&nbsp;</div> <div>幸亏的是，我还有另外一台CentOS服务器，那上面所有的服务都是正常的。</div> <div>两个服务器大体上是相似了，出现这个问题，可以肯定是某些配置出现了问题。</div> <div>IT民工开始乾坤大挪移，进行比较</div> <div>没有用diff，用的是Beyond compare，进行两个/etc文件夹比较。</div> <div>首先只保留7天内变化的文件和文件夹。这排除了好多，不错不错。</div> <div>然后再排除万难，发现两个地方的/etc/selinux/config不一样，出问题的机器上selinux是enabling的，</div> <div>没有问题的机器是disabled。</div> <div>&nbsp;</div> <div>死马当活马医，改成disabled，重启，发现一切OK了。</div> <div>&nbsp;</div> <div>selinux配置还需要后续加强。</div> <div>&nbsp;</div></div></div><br>

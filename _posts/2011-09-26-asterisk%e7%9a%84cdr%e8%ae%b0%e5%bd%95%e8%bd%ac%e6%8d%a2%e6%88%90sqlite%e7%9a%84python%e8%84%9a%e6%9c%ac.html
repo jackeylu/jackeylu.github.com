@@ -1,0 +1,95 @@
+---
+layout: post
+title: Asterisk的CDR记录转换成sqlite的python脚本
+categories: []
+tags:
+- Uncategorized
+status: publish
+type: post
+published: true
+meta:
+  _wpas_done_linkedin: '1'
+  reddit: a:2:{s:5:"count";s:1:"0";s:4:"time";s:10:"1338162312";}
+---
+<p>Asterisk在服务过程中会成长Call Detailed Record （CDR）日志文件，可用于通话计费。 <p>这在一定程度上保证了数据来源的可靠性，有助于后期实验设计。 <p>但是该CDR文件虽然是以逗号隔开的CSV文件，但是导入sqlite的时候存在问题，用sqlite自带的.import命令在处理特殊数据时候存在bug，例如数据为： <p>"","307","001307","ipic-out","""307"" &lt;307&gt;","SIP/307-082593c8","Local/307@ipic-out-46c2,1","Dial","SIP/307@server_ipic4","2010-08-25 01:01:05","2010-08-25 01:01:05","2010-08-25 01:01:10",5,5,"ANSWERED","DOCUMENTATION","1282698065.16","" <p>上述为一条CDR日志。在将"Local/307@ipic-out-46c2,1"导入时，因为引号内部的逗号，会造成导入失败。一种解决方案是用其他工具来处理，python在自带的csv模块下，可以方便地处理这种csv文件。代码见后文，聊记以供后用。<pre>#! Env Python
+# Import the CDR csv <span style="color:#0000ff;">data</span> into sqlite3 database
+
+<span style="color:#0000ff;">import</span> sqlite3
+<span style="color:#0000ff;">import</span> csv
+
+
+<span style="color:#0000ff;">class</span> CSV2Sqlite:
+	<span style="color:#0000ff;">def</span> __init__(self,dbfile,table_name,csvfile):
+		self.dbfile = dbfile
+		self.table_name= table_name
+		self.csvfile= csvfile
+		#####################################
+		self.table_script='''
+		drop table <span style="color:#0000ff;">if</span> exists %s;
+		
+		CREATE TABLE %s (
+		cdr_idx INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+		accountcode VARCHAR(20)  NULL,
+		src VARCHAR(80)  NOT NULL,
+		dst VARCHAR(80)  NOT NULL,
+		dcontext VARCHAR(80)  NOT NULL,
+		clid VARCHAR(80)  NOT NULL,
+		channel VARCHAR(80)  NULL,
+		dstchannel VARCHAR(80)  NOT NULL,
+		lastapp VARCHAR(80)  NOT NULL,
+		lastdata VARCHAR(80)  NOT NULL,
+		<span style="color:#0000ff;">start</span> DATETIME   NULL,
+		answer DATETIME  NULL,
+		<span style="color:#0000ff;">end</span> DATETIME  NULL,
+		duration INTEGER  NULL,
+		billsec INTEGER  NULL,
+		disposition VARCHAR(12)  NULL,
+		amaflags VARCHAR(12)  NULL,
+		uniqueid VARCHAR(32)  NULL,
+		unknown VARCHAR(80)  NULL);
+		''' % (self.table_name, self.table_name)
+		
+		schema_cols='''accountcode,src,dst,dcontext,
+		clid,channel,dstchannel,lastapp,lastdata,<span style="color:#0000ff;">start</span>,
+		answer,<span style="color:#0000ff;">end</span>,duration,billsec,disposition,amaflags,
+		uniqueid,unknown'''
+
+		self.sql = "<span style="color:#8b0000;">insert into </span>"+table_name \
+			+"<span style="color:#8b0000;"> (</span>"+schema_cols+"<span style="color:#8b0000;">) values (</span>"+"<span style="color:#8b0000;">?,</span>"*17+"<span style="color:#8b0000;">?</span>"+"<span style="color:#8b0000;">) ;</span>"
+	
+	<span style="color:#0000ff;">def</span> trans(self):
+		con = sqlite3.connect(self.dbfile)
+		cur = con.cursor()
+		# create the table
+		<span style="color:#0000ff;">print</span> self.table_script
+		cur.executescript(self.table_script)
+
+		# Read the csv file
+		spamreader = csv.reader(<span style="color:#0000ff;">open</span>(self.csvfile), delimiter=',');
+		for row in spamreader:
+			# insert <span style="color:#0000ff;">data</span>
+			cur.execute(self.sql,tuple(row))
+		
+		# the commit must call directly, 
+		# or the transaction will be failed
+		con.commit()
+		cur.<span style="color:#0000ff;">close</span>()
+		con.<span style="color:#0000ff;">close</span>()
+
+		<span style="color:#0000ff;">print</span> "<span style="color:#8b0000;">Importing Done!</span>"
+
+<span style="color:#0000ff;">def</span> help(excutefile):
+	<span style="color:#0000ff;">print</span> '''Import the Asterisk CDR file (the csv separated with ',') to a sqlite file.
+
+%s &lt;sqlite db file&gt; &lt;table <span style="color:#0000ff;">name</span>&gt; &lt;csv file <span style="color:#0000ff;">name</span>&gt;
+
+	''' % (excutefile)
+
+<span style="color:#0000ff;">if</span> __name__ == "<span style="color:#8b0000;">__main__</span>":
+	<span style="color:#0000ff;">import</span> <span style="color:#0000ff;">sys</span>
+	<span style="color:#0000ff;">if</span> len(<span style="color:#0000ff;">sys</span>.argv)&gt;=4:
+		# do it
+		tran = CSV2Sqlite(<span style="color:#0000ff;">sys</span>.argv[1],<span style="color:#0000ff;">sys</span>.argv[2],<span style="color:#0000ff;">sys</span>.argv[3])
+		tran.trans()
+	<span style="color:#0000ff;">else</span>:
+		help(<span style="color:#0000ff;">sys</span>.argv[0])</pre>

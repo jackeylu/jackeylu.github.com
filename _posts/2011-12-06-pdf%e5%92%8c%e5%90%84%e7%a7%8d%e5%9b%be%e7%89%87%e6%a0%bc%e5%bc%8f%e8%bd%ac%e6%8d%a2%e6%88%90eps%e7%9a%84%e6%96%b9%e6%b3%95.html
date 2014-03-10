@@ -1,0 +1,26 @@
+---
+layout: post
+title: pdf和各种图片格式转换成eps的方法
+categories: []
+tags:
+- Uncategorized
+status: publish
+type: post
+published: true
+meta:
+  _wpas_done_linkedin: '1'
+  reddit: a:2:{s:5:"count";s:1:"0";s:4:"time";s:10:"1338162312";}
+---
+IEEE会议、期刊在其conf-express网站上要求上传latex源码，要求是生成 dvi格式文件，故编译命令应该用latex，而不能用pdftex等；
+同时，对使用到的任何图片，都要求是eps格式。现罗列常用的pdf、其他文件格式转换成 eps的方法。
+以下方法，均自由、免费。
+
+1、pdftops.exe pdf --&gt; ps
+ps2eps ps-&gt;eps
+
+bmp2png.exe
+png2bmp.exe
+
+2、 Gimp可以打开pdf以及其他各种图像文件。可以通过gimp转成eps格式文件，而且gimp生成的eps比较容易调整大小，会比方法1产生的文件 小。
+
+当然，各种方法都不怎么影响生成的dvi和pdf文件大小。

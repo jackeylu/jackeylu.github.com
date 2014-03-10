@@ -1,0 +1,121 @@
+---
+layout: post
+title: 转载Making PC's Speak with SAPI.SpVoice
+categories: []
+tags:
+- Uncategorized
+status: publish
+type: post
+published: true
+meta:
+  _wpas_done_linkedin: '1'
+  reddit: a:2:{s:5:"count";s:1:"0";s:4:"time";s:10:"1338139086";}
+---
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td><h3><a href="http://www.evernote.com/">From Evernote:</a></h3></td>
+</tr>
+<tr>
+<td><h1>[&#36716;&#36733;]Making PC's Speak with SAPI.SpVoice</h1> Clipped from: <a href="http://www.visualbasicscript.com/Making-PC39s-Speak-with-SAPISpVoice-m63061.aspx">http://www.visualbasicscript.com/Making-PC39s-Speak-with-SAPISpVoice-m63061.aspx</a></td>
+</tr>
+</table>
+
+Not a useful script, but a little fun never the less. <img src="http://jackeylu.files.wordpress.com/2011/10/1db2b23019c7e0c39bcc8d078f71e84d.gif" alt="" title="1db2b23019c7e0c39bcc8d078f71e84d" width="15" height="15" class="alignnone size-full wp-image-267" />
+
+this is a few examples of usage for the SAPI.SpVoice Object (<em>microsoft sam</em>)
+
+How to Make Your PC talk. (Talk Box Basic)
+
+<pre>
+</pre> <pre>
+</pre> <pre> '************************
+'* X BiLe
+'* Local Talk Box
+'* Solo VBS
+'************************
+
+do
+
+'create the voice object
+Set VObj = CreateObject(&quot;SAPI.SpVoice&quot;)
+
+'get what the user wants to say, exit if cancel or return no msg
+MSG = InputBox(&quot;Type what you want the PC to say&quot; &amp; VBCRLF &amp; VBCRLF &amp; VBCRLF &amp; &quot;To End enter Nothing or push the Cancel button&quot;, &quot;Voice Box By X BiLe&quot;, &quot;&quot;)
+If MSG = &quot;&quot; Then WScript.quit: Else
+
+'use the VObj to speak msg
+with VObj
+.Volume = 100
+.Speak MSG
+end with
+
+loop
+</pre>
+
+Now the question is further posed on how to actually get someone elses pc to talk using remote access.
+
+this challenge can easily be tackled assuming you have C$ access (C Share)
+
+<em>Please also note that this is not the only way to do this like all things in computers, please remember that in all scripts you do <img src="http://jackeylu.files.wordpress.com/2011/10/629b0784d82f60798aecdc4896c15a31.gif" alt="" title="629b0784d82f60798aecdc4896c15a31" width="15" height="16" class="alignnone size-full wp-image-265" /></em>
+
+<pre> '************************
+'* X BiLe
+'* Remote Voice Send
+'* Solo VBS
+'************************
+
+'get ip
+IP = InputBox(&quot;Type the Name or IP of the PC to send Voice to:&quot;, &quot;Remote Voice Send By X BiLe&quot;, &quot;&quot;)
+If IP = &quot;&quot; Then WScript.quit: Else
+
+'get MSG
+MSG = InputBox(&quot;Type what you want the PC to say:&quot;, &quot;Remote Voice Send By X BiLe&quot;, &quot;&quot;)
+If MSG = &quot;&quot; Then WScript.quit: Else
+
+'vbs command to send
+A = &quot;on error resume next&quot; &amp; VBCRLF &amp; _
+&quot; CreateObject(&quot;&quot;SAPI.SpVoice&quot;&quot;).speak &quot; &amp; &quot;&quot;&quot;&quot; &amp; MSG &amp; &quot;&quot;&quot;&quot; &amp; VBCRLF &amp; _
+&quot; CreateObject(&quot;&quot;Scripting.FileSystemObject&quot;&quot;).DeleteFile (&quot;&quot;C:Voice1.vbs&quot;&quot;)&quot;
+
+' Create the vbs on remote C$
+CreateObject(&quot;Scripting.FileSystemObject&quot;).OpenTextFile(&quot;\&quot; &amp; ip &amp; &quot;C$Voice1.vbs&quot;,2,True).Write A
+
+' Run the VBS through Wscript on remote machine via WMI Object Win32_Process
+B = GetObject(&quot;winmgmts:\&quot; &amp; IP &amp; &quot;rootcimv2:Win32_Process&quot;).Create(&quot;C:windowssystem32wscript.exe &quot;&quot;C:Voice1.vbs&quot;&quot;&quot;, null, null, intProcessID)
+
+</pre>
+
+like all objects to be created in VBS there are more than just the 3 properties i actually use here.
+
+SAPI.SpVoice Properties:
+
+'.Pause = pause speaking
+'.resume = resume after pause
+'.Rate = speed at which voice speaks
+'.Voice = you can use set and a voice value to change the voice (if multiple exist on machine)
+'.Volume = volume of voice (not system volume, just voice)
+'.WaitUntilDone = wait until done - dont know how else to say that ;)
+
+how to set the 3 useful voice Properties
+
+<pre> 'create object and then setup the properties
+Set VObj = CreateObject(&quot;SAPI.SpVoice&quot;)
+with VObj
+Set .voice = .getvoices.item(0)
+.Volume = 100
+.Rate = 3
+end with
+</pre>
+
+Please notice that the '.getvoices.item(0)' has refrenced item 0, the getvoices is in an array (if multiple are present)
+
+to retrive the names of the values you could do a simple call like:
+
+<pre> 'create object and then loop for the index and name
+Set VObj = CreateObject(&quot;SAPI.SpVoice&quot;)
+For Each Voice In VObj.getvoices
+I = I + 1
+msgbox &quot;&quot; &amp; (I - 1) &amp; &quot; - &quot; &amp; Voice.GetDescription
+Next
+</pre>
+i dont know, its just one of those toy codes any ways <img src="http://jackeylu.files.wordpress.com/2011/10/663bf6131b829ea9d9c3558cea01a15f.gif" alt="" title="663bf6131b829ea9d9c3558cea01a15f" width="15" height="15" class="alignnone size-full wp-image-266" />

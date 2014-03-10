@@ -1,0 +1,15 @@
+---
+layout: post
+title: explorer.exe的命令参数及其应用
+categories: []
+tags:
+- technology
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: jmp-eax.blogspot.com
+  blogger_author: JMP
+  blogger_250ca80ed681db3745a15b2b9f221f45_permalink: '3072870582449269523'
+---
+<p>在Windows中，相信大家对"Explorer.exe"并不陌生!通常情况下，在"开始→运行"中输 入"Explorer.exe"命令就能以"资源管理器"方式打开"我的文档"。其实，Explorer.exe还有很多鲜为人知的参数。 <br />　　命令格式 <br />　　Explorer [/n][/e][[,/root],[path]][[,/select],[path filename]] <br />　　参数说明 <br />　　/n表示以"我的电脑"方式打开一个新的窗口，通常打开的是Windows安装分区的根目录。 <br />　　/e表示以"资源管理器"方式打开一个新的窗口，通常打开的也是Windows安装分区的根目录。 <br />　　/root,[path]表示打开指定的文件夹，/root表示只显示指定文件夹下面的文件（夹），不显示其它磁盘分区和文件夹；[path]表示指定的路径。 <br />　　如果不加/root参数，而只用[path]参数，则可以显示其它磁盘分区和文件夹中的内容。另外，[path]还可以指定网络共享文件夹。 <br />　　/select,[path filename]表示打开指定的文件夹并且选中指定的文件，[path filename]表示指定的路径和文件名。 <br />　　如果不加/select参数，则系统会用相应的关联程序打开该文件。如果[path filename]不跟文件名就会打开该文件夹的上级目录并选中该文件夹。 <br />　　应用实例 <br />　　1.以"资源管理器"方式打开E盘根目录 <br />　　单击"开始→运行"，输入"explorer /e,/root,e:\"，回车即可。如果需要显示其它磁盘分区和文件夹中的内容，可以输入"explorer /e,e:\"。 <br />　　2.以"我的电脑"方式打开"E:\Download"目录下的QQ.exe文件在"开始→运行"中键入"explorer /n,/selecte:\download\qq.exe"或"explorer /selecte:\download\qq.exe"，回车即可。 <br />　　3.通过"开始"菜单中的"Windows 资源管理器"命令打开特定窗口 <br />　　以在Windows XP下打开E盘根目录为例。首先在"开始"菜单中用鼠标右键单击"所有程序→附件→Windows 资源管理器"项，选择"属性"命令。接着在弹出窗口的"目标"栏中输入"%SystemRoot%\explorer.exe /e,e:\"（默认值是"%SystemRoot%\explorer.exe"）即可。</p>

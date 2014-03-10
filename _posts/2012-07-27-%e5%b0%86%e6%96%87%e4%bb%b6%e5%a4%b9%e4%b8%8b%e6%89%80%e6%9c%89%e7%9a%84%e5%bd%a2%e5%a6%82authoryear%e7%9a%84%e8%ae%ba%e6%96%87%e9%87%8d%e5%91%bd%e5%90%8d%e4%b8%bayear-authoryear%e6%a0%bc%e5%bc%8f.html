@@ -1,0 +1,41 @@
+---
+layout: post
+title: 将文件夹下所有的形如*authoryear*的论文重命名为year-*authoryear*格式
+categories:
+- research
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+---
+论文多了，需要有良好的分类和目录结构，才有利于在知识上挖掘出更新的知识。
+
+一直以来都是使用<strong>[author][year]</strong>这种方式命名论文文件，这个的好处是同一作者、同一 领域的论文能够 自动地按照author进行展示，不足的是要对整个领域的某一子领域进行分析不是非常方便，因此需要有方便的 文献管理工具，这里推荐jabref，因为使用它，你不必担负盗版的名声，同时，它也非常好用。
+
+在文献管理工具中可以通过自动的排序（例如jabref中能够按照author、year的方式排序），也可以自己调整排序方式，很是 方便。按道理，有了文献管理工具，就不需要在文件夹中去翻来覆去地挑拣文献了，但是为了好看，我突然觉得[year]-[author] [year]的方式非常有趣。那么我们可以在jabref中的bibkey设置为[author][year]<em>模式， 而在文件夹中设置成[year]-[author][year]</em>模式，这可以在文献管理工具和论文写作上，同时在文件夹浏 览中取得 比较好的视觉效果折衷。
+
+那么问题就是如何将上万个文件重命名，这肯定不能用F2+typing去做，会死人的，至少脑子会笨死的。 于是coding如下，最优先使用的当然是脚本语言了。于是最常用的shell脚本出炉一个(仍有一些bug存在)。
+<pre><code>#! /bin/bash 
+# rename files 
+#  see gist <a href="https://gist.github.com/3188132">https://gist.github.com/3188132</a>
+# TODO 
+# 1. filename with more than one year number 
+# a file name with more than one year number, like 
+# Chen2000-tech-Guanling-Chen-TR2000-381, the shell doesn't # know how to deal with it, as the result of grep "-Po" returned 
+# with two number "2000\n" and "2000" 
+# 
+# 2. filename with spaces 
+# 3. same filename conflict
+
+for filename in `find . -type f -and -name "*.nh" -or -name "*.kdh" -or -name "*.pdf" -or -name "*.ps" -or -name "*.ppt"` do
+    echo "filename is $filename" 
+    if [ -f "$filename" ]
+    then
+           dname=`dirname "$filename"` 
+fname=`basename "$filename"` 
+year=`echo "$fname" | grep -Po "^(19|20)\d{2}"` 
+if [ $year ] 
+then echo "begin with year number, ignored" continue fi year=`echo "$fname" | grep -Po "(19|20)\d{2}"` if [ $year ] then newname="$dname"/$year-"$fname" echo "new name is $newname" mv "$filename" "$newname" fi fi done</code></pre>

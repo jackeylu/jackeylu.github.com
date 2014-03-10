@@ -1,0 +1,202 @@
+---
+layout: post
+title: Pthreads调试
+categories: []
+tags:
+- Uncategorized
+status: publish
+type: post
+published: true
+meta:
+  _wpas_done_linkedin: '1'
+---
+<pre><pre><span style="color:#008000;">// finds the primes between 2 and n; uses the Sieve of Eratosthenes,</span>
+<span style="color:#008000;">// deleting all multiples of 2, all multiples of 3, all multiples of 5,</span>
+<span style="color:#008000;">// etc.; not efficient, e.g. each thread should do deleting for a whole</span>
+<span style="color:#008000;">// block of values of base before going to nextbase for more </span>
+
+<span style="color:#008000;">// usage:  sieve nthreads n</span>
+<span style="color:#008000;">// where nthreads is the number of worker threads</span>
+
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;pthread.h&gt;
+
+#define MAX_N 100000000
+#define MAX_THREADS 100
+
+<span style="color:#008000;">// shared variables</span>
+<span style="color:#0000ff;">int</span> nthreads,  <span style="color:#008000;">// number of threads (not counting main())</span>
+    n,  <span style="color:#008000;">// upper bound of range in which to find primes</span>
+    prime[MAX_N+1],  <span style="color:#008000;">// in the end, prime[i] = 1 if i prime, else 0</span>
+    nextbase;  <span style="color:#008000;">// next sieve multiplier to be used</span>
+
+<span style="color:#0000ff;">int</span> work[MAX_THREADS];  <span style="color:#008000;">// to measure how much work each thread does,</span>
+                        <span style="color:#008000;">// in terms of number of sieve multipliers checked</span>
+
+<span style="color:#008000;">// lock index for the shared variable nextbase</span>
+pthread_mutex_t nextbaselock = PTHREAD_MUTEX_INITIALIZER;
+
+<span style="color:#008000;">// ID structs for the threads</span>
+pthread_t id[MAX_THREADS];
+
+<span style="color:#008000;">// "crosses out" all multiples of k, from k*k on</span>
+<span style="color:#0000ff;">void</span> crossout(<span style="color:#0000ff;">int</span> k)
+{  <span style="color:#0000ff;">int</span> i;
+
+   <span style="color:#0000ff;">for</span> (i = k; i*k &lt;= n; i++)  {
+      prime[i*k] = 0;
+   }
+}
+
+<span style="color:#008000;">// worker thread routine</span>
+<span style="color:#0000ff;">void</span> *worker(<span style="color:#0000ff;">int</span> tn)  <span style="color:#008000;">// tn is the thread number (0,1,...)</span>
+{  <span style="color:#0000ff;">int</span> lim,base;
+
+   <span style="color:#008000;">// no need to check multipliers bigger than sqrt(n)</span>
+   lim = <span style="color:#0000ff;">sqrt</span>(n);
+
+   <span style="color:#0000ff;">do</span>  {
+      <span style="color:#008000;">// get next sieve multiplier, avoiding duplication across threads</span>
+      pthread_mutex_lock(&amp;nextbaselock);
+      base = nextbase += 2;
+      pthread_mutex_unlock(&amp;nextbaselock);
+      <span style="color:#0000ff;">if</span> (base &lt;= lim)  {
+         work[tn]++;  <span style="color:#008000;">// log work done by this thread</span>
+         <span style="color:#008000;">// don't bother with crossing out if base is known to be</span>
+         <span style="color:#008000;">// composite</span>
+         <span style="color:#0000ff;">if</span> (prime[base])
+            crossout(base);
+      }
+      <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">return</span>;
+   } <span style="color:#0000ff;">while</span> (1);
+}
+
+main(<span style="color:#0000ff;">int</span> argc, <span style="color:#0000ff;">char</span> **argv)
+{  <span style="color:#0000ff;">int</span> nprimes,  <span style="color:#008000;">// number of primes found </span>
+       totwork,  <span style="color:#008000;">// number of base values checked</span>
+       i;
+   <span style="color:#0000ff;">void</span> *p;
+
+   n = <span style="color:#0000ff;">atoi</span>(argv[1]);
+   nthreads = <span style="color:#0000ff;">atoi</span>(argv[2]);
+   <span style="color:#0000ff;">for</span> (i = 2; i &lt;= n; i++)
+      prime[i] = 1;
+   crossout(2);
+   nextbase = 1;
+   <span style="color:#008000;">// get threads started</span>
+   <span style="color:#0000ff;">for</span> (i = 0; i &lt; nthreads; i++)  {
+      pthread_create(&amp;id[i],NULL,(<span style="color:#0000ff;">void</span> *) worker,(<span style="color:#0000ff;">void</span> *) i);
+   }
+
+   <span style="color:#008000;">// wait for all done</span>
+   totwork = 0;
+   <span style="color:#0000ff;">for</span> (i = 0; i &lt; nthreads; i++)  {
+      pthread_join(id[i],&amp;p);
+      <span style="color:#0000ff;">printf</span>("<span style="color:#8b0000;">%d values of base done\n</span>",work[i]);
+      totwork += work[i];
+   }
+   <span style="color:#0000ff;">printf</span>("<span style="color:#8b0000;">%d total values of base done\n</span>",totwork);
+
+   <span style="color:#008000;">// report results</span>
+   nprimes = 0;
+   <span style="color:#0000ff;">for</span> (i = 2; i &lt;= n; i++)
+      <span style="color:#0000ff;">if</span> (prime[i]) nprimes++;
+   <span style="color:#0000ff;">printf</span>("<span style="color:#8b0000;">the number of primes found was %d\n</span>",nprimes);
+
+}
+<span style="color:#008000;">// finds the primes between 2 and n; uses the Sieve of Eratosthenes,</span>
+<span style="color:#008000;">// deleting all multiples of 2, all multiples of 3, all multiples of 5,</span>
+<span style="color:#008000;">// etc.; not efficient, e.g. each thread should do deleting for a whole</span>
+<span style="color:#008000;">// block of values of base before going to nextbase for more </span>
+
+<span style="color:#008000;">// usage:  sieve nthreads n</span>
+<span style="color:#008000;">// where nthreads is the number of worker threads</span>
+
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+#include &lt;pthread.h&gt;
+
+#define MAX_N 100000000
+#define MAX_THREADS 100
+
+<span style="color:#008000;">// shared variables</span>
+<span style="color:#0000ff;">int</span> nthreads,  <span style="color:#008000;">// number of threads (not counting main())</span>
+    n,  <span style="color:#008000;">// upper bound of range in which to find primes</span>
+    prime[MAX_N+1],  <span style="color:#008000;">// in the end, prime[i] = 1 if i prime, else 0</span>
+    nextbase;  <span style="color:#008000;">// next sieve multiplier to be used</span>
+
+<span style="color:#0000ff;">int</span> work[MAX_THREADS];  <span style="color:#008000;">// to measure how much work each thread does,</span>
+                        <span style="color:#008000;">// in terms of number of sieve multipliers checked</span>
+
+<span style="color:#008000;">// lock index for the shared variable nextbase</span>
+pthread_mutex_t nextbaselock = PTHREAD_MUTEX_INITIALIZER;
+
+<span style="color:#008000;">// ID structs for the threads</span>
+pthread_t id[MAX_THREADS];
+
+<span style="color:#008000;">// "crosses out" all multiples of k, from k*k on</span>
+<span style="color:#0000ff;">void</span> crossout(<span style="color:#0000ff;">int</span> k)
+{  <span style="color:#0000ff;">int</span> i;
+
+   <span style="color:#0000ff;">for</span> (i = k; i*k &lt;= n; i++)  {
+      prime[i*k] = 0;
+   }
+}
+
+<span style="color:#008000;">// worker thread routine</span>
+<span style="color:#0000ff;">void</span> *worker(<span style="color:#0000ff;">int</span> tn)  <span style="color:#008000;">// tn is the thread number (0,1,...)</span>
+{  <span style="color:#0000ff;">int</span> lim,base;
+
+   <span style="color:#008000;">// no need to check multipliers bigger than sqrt(n)</span>
+   lim = <span style="color:#0000ff;">sqrt</span>(n);
+
+   <span style="color:#0000ff;">do</span>  {
+      <span style="color:#008000;">// get next sieve multiplier, avoiding duplication across threads</span>
+      pthread_mutex_lock(&amp;nextbaselock);
+      base = nextbase += 2;
+      pthread_mutex_unlock(&amp;nextbaselock);
+      <span style="color:#0000ff;">if</span> (base &lt;= lim)  {
+         work[tn]++;  <span style="color:#008000;">// log work done by this thread</span>
+         <span style="color:#008000;">// don't bother with crossing out if base is known to be</span>
+         <span style="color:#008000;">// composite</span>
+         <span style="color:#0000ff;">if</span> (prime[base])
+            crossout(base);
+      }
+      <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">return</span>;
+   } <span style="color:#0000ff;">while</span> (1);
+}
+
+main(<span style="color:#0000ff;">int</span> argc, <span style="color:#0000ff;">char</span> **argv)
+{  <span style="color:#0000ff;">int</span> nprimes,  <span style="color:#008000;">// number of primes found </span>
+       totwork,  <span style="color:#008000;">// number of base values checked</span>
+       i;
+   <span style="color:#0000ff;">void</span> *p;
+
+   n = <span style="color:#0000ff;">atoi</span>(argv[1]);
+   nthreads = <span style="color:#0000ff;">atoi</span>(argv[2]);
+   <span style="color:#0000ff;">for</span> (i = 2; i &lt;= n; i++)
+      prime[i] = 1;
+   crossout(2);
+   nextbase = 1;
+   <span style="color:#008000;">// get threads started</span>
+   <span style="color:#0000ff;">for</span> (i = 0; i &lt; nthreads; i++)  {
+      pthread_create(&amp;id[i],NULL,(<span style="color:#0000ff;">void</span> *) worker,(<span style="color:#0000ff;">void</span> *) i);
+   }
+
+   <span style="color:#008000;">// wait for all done</span>
+   totwork = 0;
+   <span style="color:#0000ff;">for</span> (i = 0; i &lt; nthreads; i++)  {
+      pthread_join(id[i],&amp;p);
+      <span style="color:#0000ff;">printf</span>("<span style="color:#8b0000;">%d values of base done\n</span>",work[i]);
+      totwork += work[i];
+   }
+   <span style="color:#0000ff;">printf</span>("<span style="color:#8b0000;">%d total values of base done\n</span>",totwork);
+
+   <span style="color:#008000;">// report results</span>
+   nprimes = 0;
+   <span style="color:#0000ff;">for</span> (i = 2; i &lt;= n; i++)
+      <span style="color:#0000ff;">if</span> (prime[i]) nprimes++;
+   <span style="color:#0000ff;">printf</span>("<span style="color:#8b0000;">the number of primes found was %d\n</span>",nprimes);
+
+}</pre></pre>

@@ -1,0 +1,14 @@
+---
+layout: post
+title: FWNPM SSL Errors
+categories: []
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _oembed_40aa84ebda063c9780d38ce545e250d2: ! '{{unknown}}'
+---
+Source: <a href="http://thomashunter.name/blog/npm-ssl-errors/">http://thomashunter.name/blog/npm-ssl-errors/</a>
+
+&gt; At my day job, we sit behind a firewall which can break SSL certificates. If you attempt to install something with NPM and get the error message <em>npm ERR! Error: SSL Error: UNABLE_TO_VERIFY_LEAF_SIGNATURE</em>, it means you are in a similar situation. To fix this, simply run <strong>npm config set strict-ssl false</strong> and the issue will go away. Keep in mind that this makes your NPM installation less secure, and that you should re-enable strict-ssl whenever you are outside of the firewall.

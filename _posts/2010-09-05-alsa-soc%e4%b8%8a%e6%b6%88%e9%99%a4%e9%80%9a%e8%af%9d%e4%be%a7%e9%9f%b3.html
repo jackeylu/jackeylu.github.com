@@ -1,0 +1,15 @@
+---
+layout: post
+title: ! '>Alsa SoC上消除通话侧音'
+categories: []
+tags:
+- Uncategorized
+status: publish
+type: post
+published: true
+meta:
+  blogger_blog: jmp-eax.blogspot.com
+  blogger_author: JMP
+  blogger_250ca80ed681db3745a15b2b9f221f45_permalink: '8274271984450599965'
+---
+&gt;<DIV>&nbsp;</DIV>  <DIV>  <DIV style="color:#000;">工作记录：<BR>开发的某语音软件运行在开发板上，存在一个问题：<U><B>自己的声音从microphone进去后会从扬声器Speaker里面出来，这在通 讯术语中叫做侧音</B></U>。<BR>其实我们自己家里用的电话也是有侧音的，但是侧音很小，也是被保留下的，可以增强语音通话的质量；如果侧音过强，则会严重损伤通话效果。为此，我 们需要减小侧音。<BR>具体的工作是实验室一个师妹进行的，我把其中一些关键内容记录下来，以免忘记，也供更多的为此困扰的人参考。<BR>我们解决问题的过程是：<BR>  <OL>  <LI>自己的声音从Speaker出来的现象，定位其学术、科技名为：<B>侧音</B>（英文叫做<B>Sidetone</B>）。这 是成功的一半。   <LI>对于技术问题，本人一般用Google多，发现侧音在中文中出现都是一些概念介绍，偶尔有一些介绍消减方法也多少硬件设计，这对我们 解决问题时带来了不小的疑惑，我们怀疑还能否用软件的方式解决这个问题；   <LI>黔驴技穷后，我们使用了关键词sidetone alsa，然后发现在alsa for embedded Linux中有专门的soc定制，里面提到过sidetone，心里顿时感觉前途一片光明；   <LI>我们团队就合作分工阅读alsa的soc framework、driver source、alsa-utils等资料和源码。这 时候我再次感谢张焕国老师在我们本科上信息安全课程时提到的：最重要的课程是语数英。找资料还是得找英文原著，有时候甚至在看资料的时候 纠结：为什么自己不会法文、德文。。。还好那些体系的文字翻译是比较成功的。   <LI>我们最后发现，我们所使用的开发板的音频芯片AD/DA是wm9713，其驱动里面带有sidetone的控制。通过alsa- utils里面的amixer工具，可以和阅读wm9713驱动一样，发现该芯片本身提供了sidetone控制接口。Sidetone Mux的Setereo、Mic 1、Mic 2、 Mute四种方式。经过一定的测试后发现确实有效。   <LI>最后，我们通过参考amixer的源码，为此问题画上了一个句号。 </LI></OL>总结的话就是，要找清楚对象，明白要解决的问题是什么。这里我们为此问题经历过多次折腾，前面两次都没有成功，最后一次也就是第三次才成功。这里 面关键的原因是，前两次不知道这问题叫做侧音！第三次是一个要好的工程师朋友看到现象后顺口告诉我们这是侧音 。<BR>这也说明隔行是如同隔山一样。<BR><BR>Mark 之，虽然很可能到本人见马克思的时候都用不上了。<BR></DIV></DIV>

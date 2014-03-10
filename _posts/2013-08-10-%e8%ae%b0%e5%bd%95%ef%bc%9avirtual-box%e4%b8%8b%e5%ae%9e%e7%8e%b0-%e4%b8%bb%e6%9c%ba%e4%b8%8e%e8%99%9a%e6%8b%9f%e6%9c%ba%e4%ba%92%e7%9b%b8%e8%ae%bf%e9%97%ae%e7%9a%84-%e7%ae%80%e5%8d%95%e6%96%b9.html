@@ -1,0 +1,30 @@
+---
+layout: post
+title: 记录：Virtual Box下实现 主机与虚拟机互相访问的 简单方法，NAT+Host Only
+categories: []
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _wpas_done_682073: '1'
+  _publicize_done_external: a:1:{s:8:"linkedin";a:1:{s:10:"CCWiOiGjgJ";b:1;}}
+---
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td><h3><a href="http://evernote.com/">From Evernote:</a></h3></td>
+</tr>
+<tr>
+<td><h1>记录：Virtual Box下实现主机与虚拟机互相访问的简单方法，NAT+Host Only</h1></td>
+</tr>
+</table>
+
+virtu box上安装了一个linux服务器，1）希望这个linux服务器能够对本主机（物理机，例如是windows）提供网络服务，例如ssh、mysqld、web等，2）同时该linux服务器又要求能够访问外界网站进行软件更新。
+
+目前发现的最简单方式，是通过NAT设置一个网卡实现功能2，同时用host only方式设置第二块网卡实现功能1.
+
+设置的截图如下：
+
+[gallery]
+
+linux服务器内不需要做任何设置。

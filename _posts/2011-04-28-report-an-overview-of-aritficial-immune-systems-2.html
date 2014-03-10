@@ -1,0 +1,172 @@
+---
+layout: post
+title: Report An Overview of Aritficial Immune Systems
+categories: []
+tags:
+- Uncategorized
+status: publish
+type: post
+published: true
+meta:
+  reddit: a:2:{s:5:"count";s:1:"0";s:4:"time";s:10:"1338162312";}
+  _oembed_720fa28a7dafc340a4ef07a5f0380843: ! '{{unknown}}'
+---
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td><h3><a href="http://www.evernote.com/">From Evernote:</a></h3></td>
+</tr>
+<tr>
+<td><h1>[Report] An Overview of Aritficial Immune Systems</h1> Clipped from: <a href="http://www.artificial-immune-systems.org/Courses/York/lecture1.pdf">http://www.artificial-immune-systems.org/Courses/York/lecture1.pdf</a></td>
+</tr>
+</table>
+
+Short Lecture Course supplied by <a href="http://www-users.cs.york.ac.uk/~jtimmis/">Jon Timmis</a> of the University of York, UK (if you use any slides here, please provide a suitable acknowledgment). These lectures form part of a longer course on swarm intelligence, and also assume some knowledge of evolutionary computation. Immune networks are not covered in these slides, though they are on the course. The reason why there are no slides on immune networks is the topic is worked through with the students on a white board by adapting a clonal selection algorithm into an immune network algorithm. Negative selection is also covered on the white board, rather than through lecture slides.
+
+<ul>
+<li>Lecture 1: An Overview of Artifcial Immune Systems <a href="http://www.artificial-immune-systems.org/Courses/York/lecture1.pdf">Lecture PDF</a></li>
+<li>Lecture 2: An Introduction to Relevant Immunology <a href="http://www.artificial-immune-systems.org/Courses/York/lecture2.pdf">Lecture PDF</a></li>
+<li>Lecture 3: Immune Modelling : A simple case study <a href="http://www.artificial-immune-systems.org/Courses/York/lecture3.pdf">Lecture PDF</a></li>
+<li>Lecture 4: Engineering Artificial Immune Systems <a href="http://www.artificial-immune-systems.org/Courses/York/lecture4.pdf">Lecture PDF</a></li>
+<li>Lecture 5: Using Clonal Selection for Supervised Learning <a href="http://www.artificial-immune-systems.org/Courses/York/lecture6.pdf">Lecture PDF</a></li>
+<li>Lecture 6: On Artificial Immune Systems and Swarm Intelligence <a href="http://www.artificial-immune-systems.org/Courses/York/swarmimmunerobotics.pdf">Lecture PDF</a></li>
+</ul>
+
+第一讲：人工免疫系统概述
+Slide的题目是
+Collaborative Bio-Inspired Algorithms
+Lecture 6: Artificial Immune Systems
+
+Prof Jon Timmis
+October 25, 2010
+
+<strong>collaborative</strong>
+adj. 合作的, 协力完成的
+
+Outline:
+
+<ol>
+<li>AIS Background
+
+<ol>
+<li>History</li>
+<li>Of interest because?</li>
+</ol>
+
+</li>
+<li>Thinking about AIS</li>
+<li>Basic Immunology
+
+<ol>
+<li>The Immune what?</li>
+</ol>
+
+</li>
+<li>Engineering Artificial Immune Systems</li>
+<li>Interdiscipinary?</li>
+</ol>
+
+What are AIS?
+一种定义：AIS是一种受理论免疫学（theoretical immunology）及实验观察得到的免疫功能、原理、模型启发的适应性系统，被应用于多种复杂问题领域。（该定义来自于2002发表的书）
+De Castro, L. &amp; Timmis, J. Artificial immune systems: a new computational intelligence approach Springer Verlag, 2002
+但是上述的定义已经不能“与时俱进”了，当前发生了一些变化。具体的将在本次lecture中提到。
+
+History
+
+<ul>
+<li>开创性论文——1986年，Farmer等人（J. Doyne Farmer and Norman H. Packard and Alan S. Perelson）从理论免疫学中引出免疫网络的动态模型。
+
+<ul>
+<li>文章中对比了免疫网络和神经网络的差异</li>
+<li>建议从计算的角度分析免疫系统IS</li>
+</ul>
+
+</li>
+<li>1988年Varela（Varela, F. and Coutinho, A. and Dupire, B. and Nelson, N.）进一步对比了免疫、神经系统。</li>
+<li>1990年，日本人石田（Ishida, Y.）是第一个将免疫算法应用在解决实际问题。</li>
+<li>上世纪90年代中期，Forrest等人提出Self-nonself及反向选择算法，应用于计算机安全领域</li>
+<li>上世纪90年代中期，Hunt等人将免疫的思想用于机器学习领域</li>
+<li>started quite immunological grounded(基础性的工作开始)
+
+<ul>
+<li>1991年Bersini, H. &amp; Varela, F.出版的著作《Hints for adaptive problem solving gleaned from immune networks》</li>
+<li>1994年Forrest, S.; Perelson, A.; Allen, L. &amp; Cherukuri, R.提出的self-nonself，同前述</li>
+</ul>
+
+</li>
+<li>Kind of moved away from that, and abstracted more. (有点儿脱离原来的定义、轨迹，变得更加的抽象、隐喻？)</li>
+<li>当前，有种趋势是回归免疫学的根本以及更多的交叉(主要的表现是，2007年生物免疫学家在Nature Reviews Immunology上发表的)
+
+<ul>
+<li>例如2007年Cohen的&quot;The immune system computes&quot;</li>
+<li>“what might we gain by thinking about immune computation”, Cohen,2007（Mr. Timmis的slide中应该是笔误成了2008）</li>
+</ul>
+
+</li>
+</ul>
+
+提出问题！
+<strong>But how do we manage this intreaction to make it worth while for all concerned ... ?</strong>
+
+接着提出了AIS一些有趣的地方，自适应性、无中心、自学习、动态平衡等特征。
+
+AIS的概念框架(Conceptual Frameworks）
+<a href="http://jackeylu.files.wordpress.com/2011/04/4cd8d6d5dda93ae73a0984cdb1ebc7fa.png"><img src="http://jackeylu.files.wordpress.com/2011/04/4cd8d6d5dda93ae73a0984cdb1ebc7fa.png" alt="" title="4cd8d6d5dda93ae73a0984cdb1ebc7fa" width="612" height="242" class="alignnone size-full wp-image-232" /></a>
+
+该框架图出自Timmis Jonathan与De Castro合著的书《Artificial immune systems: a new computational intelligence approach》。将当前研究的交叉方法简单描述出来。
+
+这时候枪头一转，问个问题：什么是免疫系统（Immune System, IS）？
+有三种不同角度的解释：
+
+<ol>
+<li>Classic View
+
+<ul>
+<li>a complex system of celluar and molecular components having the primary function of distinguishing self from not self and defense against foreign organisms or substances.</li>
+<li>上面的翻译：是一种复杂系统，由细胞、分子等组成，主要的功能是从“非我”中区分出“自我”（而不是去查找“非我”，记忆、查找的空间会更小），并对外来有机物或者物质起到防御作用</li>
+</ul>
+
+</li>
+<li>Cognitive View（认知角度）
+
+<ul>
+<li>The immune system is a cognitive system whose primary role is to provide body maintenance.[2]</li>
+<li>免疫系统是一种认知系统，扮演着提供机体维护的角色[2]</li>
+</ul>
+
+</li>
+<li>Danger View
+
+<ul>
+<li>The immune system recognises dangerous agents and not non-self [9]</li>
+<li>发现威胁性物体，而不是关注于“非我”的死死寻觅 [9]</li>
+</ul>
+
+</li>
+</ol>
+
+[gallery include="233,234"]
+
+Classic view 代表的是clonal slection 和negative selection等方法。
+
+<strong>AIS的工程应用</strong>
+
+[gallery include="235,236,237,238"]
+
+提到的论文，及其相关信息和摘要：
+
+[1]Bersini, H. &amp; Varela, F. Schwefel, H.-P. &amp; Männer, R. (Eds.) <strong>Hints for adaptive problem solving gleaned from immune networks</strong> <em>Parallel Problem Solving from Nature, Springer Berlin / Heidelberg, 1991</em>, 496, 343-354
+[2] Cohen, I. R. <strong>On Tending Adam's Garden</strong> <em>Tending Adam's Garden, Academic Press</em>, 2000, 243 - 255
+[3] Cohen, I. R. <strong>Real and artificial immune systems: computing the state of the body</strong> <em>Nature Reviews Immunology</em>, 2007, 07, 569-574
+[4] De Castro, L. &amp; Timmis, J. <strong>Artificial immune systems: a new computational intelligence approach</strong> Springer Verlag, 2002
+[5] Farmer, J. D.; Packard, N. H. &amp; Perelson, A. S. <strong>The immune system, adaptation, and machine learning</strong> <em>Physica D: Nonlinear Phenomena</em>, 1986, 22, 187 - 204
+<strong>Abstract</strong>: The immune system is capable of learning, memory, and pattern recognition. By employing genetic operators on a time scale fast enough to observe experimentally, the immune system is able to recognize novel shapes without preprogramming.<strong> Here we describe a dynamical model for the immune system that is based on the network hypothesis of Jerne, and is simple enough to simulate on a computer.</strong> This model has a strong similarity to an approach to learning and artificial intelligence introduced by Holland, called the classifier system. We demonstrate that simple versions of the classifier system can be cast as a nonlinear dynamical system, and explore the analogy between the immune and classifier systems in detail. Through this comparison we hope to gain insight into the way they perform specific tasks, and to suggest new approaches that might be of value in learning systems.
+[6] Forrest, S.; Perelson, A.; Allen, L. &amp; Cherukuri, R. <strong>Self-nonself discrimination in a computer </strong><em>Research in Security and Privacy, 1994. Proceedings.</em>, 1<em>994 IEEE Computer Society Symposium on</em>, 1994, 202 -212
+<strong>Abstract</strong>: The problem of protecting computer systems can be viewed generally as the problem of<strong> learning to distinguish self from other</strong>. The authors describe a method for<strong> change detection</strong> which is based on the generation of <strong>T cells in the immune system.</strong> Mathematical analysis reveals computational costs of the system, and preliminary experiments illustrate how the method might be applied to the problem of <strong>computer viruses</strong>
+[7] Hunt, J. E. &amp; Cooke, D. E. <strong>Learning using an artificial immune system</strong> <em>Journal of Network and Computer Applications, 1996, 19, 189 - 212</em>
+<strong>Abstract</strong>: In this paper we describe an artificial immune system (AIS) which is based upon models of the natural immune system. This natural system is an example of an evolutionary learning mechanism which possesses a content addressable memory and the ability to forget little-used information. It is also an example of an adaptive non-linear network in which control is decentralized and problem processing is efficient and effective. As such, the immune system has the potential to offer novel problem solving methods. The AIS is an example of a system developed around the current understanding of the immune system. It illustrates how an artificial immune system can capture the basic elements of the immune system and exhibit some of its chief characteristics. We illustrate the potential of the AIS on a simple pattern recognition problem. We then apply the AIS to a real-world problem: the recognition of promoters in DNA sequences. The results obtained are consistent with other appproaches, such as neural networks and Quinlan's ID3 and are better than the nearest neighbour algorithm. The primary advantages of the AIS are that it only requires positive examples, and the patterns it has learnt can be explicitly examined. In addition, because it is self-organizing, it does not
+require effort to optimize any system parameters.
+[8] Ishida, Y. <strong>Fully distributed diagnosis by PDP learning algorithm: towards immune network PDP model Neural Networks</strong>, 1990., <em>1990 IJCNN International Joint Conference on</em>, 1990, 777 -782 vol.1
+<strong>Abstract</strong>: Based on the strong analogy between neural networks and distributed diagnosis models, diagnostic algorithms are presented which are similar to the learning algorithm used in neural networks. Diagnostic implications of convergence theorems proved by the Lyapunov function are also discussed. Regarding diagnosis process as a recalling process in the associative memory, a diagnostic method of associative diagnosis is also presented. A good guess of diagnosis is given as a key to recalling the correct diagnosis. The authors regard the distributed diagnosis as an immune network model, a novel PDP (parallel distributed processing) model. This models the recognition capability emergent from cooperative recognition of interconnected units.
+[9] Matzinger, P. <strong>The Danger Model: A Renewed Sense of Self</strong> <em>Science</em>, 2002, 296, 301-305
+[10] Neal, M.; Stepney, S.; Smith, R. &amp; Timmis, J. <strong>Conceptual frameworks for artificial immune systems</strong> <em>International Journal on Unconventional Computing</em>, Old City Publishing, 2005, 1, 315-338
+[11] Varela, F.; Coutinho, A.; Dupire, B. &amp; Nelson, N. <strong>Cognitive networks: immune, neural and otherwise</strong> <em>Addison Wesley Publishing Company</em>, 1988

@@ -1,0 +1,40 @@
+---
+layout: post
+title: Add a word count script for TeXWorks
+categories: []
+tags:
+- 编程
+- latex
+- tex
+- texcount
+- TeXWords
+- tool utils
+- Word count
+status: publish
+type: post
+published: true
+meta:
+  _wpas_done_linkedin: '1'
+  reddit: a:2:{s:5:"count";s:1:"0";s:4:"time";s:10:"1338139086";}
+---
+<p>We can add a new script to count the words of one tex file like this</p> <p>Here is the script “wordcouter.js”</p><pre><span style="color:#008000;">// TeXworksScript</span>
+<span style="color:#008000;">// Title: Count the words in tex file</span>
+<span style="color:#008000;">// Description: counter </span>
+<span style="color:#008000;">// Author: Jackey Lu</span>
+<span style="color:#008000;">// Version: 0.1</span>
+<span style="color:#008000;">// Date: 2011-09-21</span>
+<span style="color:#008000;">// Script-Type: standalone</span>
+<span style="color:#008000;">// Context: TeXDocument</span>
+
+
+<span style="color:#0000ff;">var</span> cmd = "<span style="color:#8b0000;">e:\\local\\texlive\\2010\\bin\\win32\\texcount.exe </span>" + TW.target.fileName;
+<span style="color:#0000ff;">var</span> result = TW.system(cmd);
+result.output;
+
+</pre>
+<p>Put the script in the TeXworks profile directory “scripts”, in windows 7, it is like this, C:\Users\[your username]\TeXworks\scripts.</p>
+<p>PS: you must change the path of&nbsp; texcount.exe with your real path.</p>
+<p>To enable it, You should change the preference.</p>
+<p><a href="http://jackeylu.files.wordpress.com/2011/09/image.png"><img style="background-image:none;padding-left:0;padding-right:0;display:inline;padding-top:0;border-width:0;" title="image" border="0" alt="image" src="http://jackeylu.files.wordpress.com/2011/09/image_thumb.png" width="364" height="237"></a></p>
+<p>then you can count the words of your tex file now, use the menu Script –&gt; Count the words in tex file.</p>
+<p><a href="http://jackeylu.files.wordpress.com/2011/09/image1.png"><img style="background-image:none;padding-left:0;padding-right:0;display:inline;padding-top:0;border-width:0;" title="image" border="0" alt="image" src="http://jackeylu.files.wordpress.com/2011/09/image_thumb1.png" width="513" height="280"></a></p>
