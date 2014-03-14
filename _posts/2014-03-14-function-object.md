@@ -13,6 +13,9 @@ tags:
 
 ---
 
+先看StackOverflow上的一个答案![](http://stackoverflow.com/questions/7930403/use-class-method-comparator-on-stdsort)。
+
+
   #include <iostream>
   #include <algorithm>
   #include <iterator>
@@ -42,40 +45,44 @@ tags:
   
 上面的例子是构建了一个复杂Compare的最"小麻雀"的实现，因为S有个默认构造函数是不需要传入任何参数的，所以
 
-#include <iostream>
-#include <algorithm>
-#include <iterator>
-#include <boost/bind.hpp>
+	#include <iostream>
+	#include <algorithm>
+	#include <iterator>
+	#include <boost/bind.hpp>
+	
+	struct S {
+  		bool ascending;
+  		S(bool _ascending):ascending(_ascending){}
+		
+  		bool Compare(int lhs, int rhs) {
+    			return ascending ? (lhs < rhs) : (rhs < lhs);
+  		}
 
-struct S {
-  bool ascending;
-  S(bool _ascending):ascending(_ascending){}
+  		bool operator()(int lhs, int rhs)
+  		{
+	  		return Compare(lhs, rhs);
+  		}
+	};
+	
+	int main () {
+	
+  		int i[] = { 1, 3, 5, 7, 8, 6, 4, 2 };
+		
+  		std::sort(i, i+8, S());
+		
+  		S s(false);
+  		s.ascending = true;
+  		std::sort(i, i+8, boost::bind(&S::Compare, &s, _1, _2));
+  		std::copy(i, i+8, std::ostream_iterator<int>(std::cout, " "));
+  		std::cout << "\n";
 
-  bool Compare(int lhs, int rhs) {
-    return ascending ? (lhs < rhs) : (rhs < lhs);
-  }
+  		s.ascending = false;
+  		std::sort(i, i+8, boost::bind(&S::Compare, &s, _1, _2));
+  		std::copy(i, i+8, std::ostream_iterator<int>(std::cout, " "));
+  		std::cout << "\n";
+	}
 
-  bool operator()(int lhs, int rhs)
-  {
-	  return Compare(lhs, rhs);
-  }
-};
+在构造函数更复杂，需要初始化等场景，例如operator() 中的判断方法会需要调用一些成员变量/方法时，常见的operator()就不能直接传递给sort方法，而需要用bind方法来实现。
 
-int main () {
-
-  int i[] = { 1, 3, 5, 7, 8, 6, 4, 2 };
-
-  std::sort(i, i+8, S());
-
-  S s;
-  s.ascending = true;
-  std::sort(i, i+8, boost::bind(&S::Compare, &s, _1, _2));
-  std::copy(i, i+8, std::ostream_iterator<int>(std::cout, " "));
-  std::cout << "\n";
-
-  s.ascending = false;
-  std::sort(i, i+8, boost::bind(&S::Compare, &s, _1, _2));
-  std::copy(i, i+8, std::ostream_iterator<int>(std::cout, " "));
-  std::cout << "\n";
-}
+同样的，如果是C++11的话，还有其他实现方法，即lambda表达式。
 
