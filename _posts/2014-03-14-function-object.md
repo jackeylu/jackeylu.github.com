@@ -84,5 +84,16 @@ tags:
 
 在构造函数更复杂，需要初始化等场景，例如operator() 中的判断方法会需要调用一些成员变量/方法时，常见的operator()就不能直接传递给sort方法，而需要用bind方法来实现。
 
-同样的，如果是C++11的话，还有其他实现方法，即lambda表达式。
+同样的，如果是C++11的话，还有其他实现方法，即lambda表达式![StackOverflow](http://stackoverflow.com/questions/18273997/passing-a-private-method-of-the-class-as-the-compare-operator-for-stdsort)。
 
+In C++11 there are two different solutions that you can take. The most generic is creating a lambda that captures the this argument:
+
+	std::sort(std::begin(i),std::end(i),
+        	  [](int x, int y) { return compare(x,y); }); // or maybe even implement here
+
+A different approach would be binding the object and the member function into a functor:
+
+	std::sort(std::begin(i),std::end(i),
+        	  std::bind(&MyClass::compare,this,_1,_2));
+        	  
+        	  
