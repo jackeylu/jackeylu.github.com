@@ -13,7 +13,7 @@ tags:
 
 ---
 
-先看StackOverflow上的一个![答案](http://stackoverflow.com/questions/7930403/use-class-method-comparator-on-stdsort)。
+先看StackOverflow上的一个问题和答案![Use class method as a comparator in std::sort](http://stackoverflow.com/questions/7930403/use-class-method-comparator-on-stdsort)。
 
 
 	#include <iostream>
