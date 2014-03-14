@@ -13,7 +13,7 @@ tags:
 
 ---
 
-先看StackOverflow上的一个问题和答案![Use class method as a comparator in std::sort](http://stackoverflow.com/questions/7930403/use-class-method-comparator-on-stdsort)。
+先看StackOverflow上的一个问题和答案[Use class method as a comparator in std::sort](http://stackoverflow.com/questions/7930403/use-class-method-comparator-on-stdsort)。
 
 
 	#include <iostream>
@@ -68,7 +68,7 @@ tags:
 	
   		int i[] = { 1, 3, 5, 7, 8, 6, 4, 2 };
 		
-  		std::sort(i, i+8, S());
+  		std::sort(i, i+8, S()); //  error: no matching function for call to 'S::S()'
 		
   		S s(false);
   		s.ascending = true;
