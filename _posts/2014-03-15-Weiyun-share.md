@@ -1,19 +1,14 @@
-
 ---
 layout: post
 title: "微云图片共享"
 categories:
-- Parallel Computing
-- Algorithm 
+- Blogging
+- Tips 
 tags:
-- CLRS
-- algorithm
-- parallel computing
-- parallel algorithm
-- speed up
-
+- weiyun
+- blog
 
 ---
 
 
-a picture from [weiyun](http://url.cn/RvcsEb)
+a picture from ![weiyun](http://url.cn/RvcsEb)
