@@ -13,7 +13,7 @@ tags:
 
 ---
 
-# The Array data structure #
+## The Array data structure ##
 
 The `array` is the fundamental contiguously-allocated data structure. Arrays are structures of fixed-size data records such that each element can be efficiently located by its `index` or (equivalently) address.
 
@@ -31,7 +31,7 @@ The downside of arrays is that we cannot adjust their size in the middle of a pr
 
 [array-size]: in modern data container, like the vector in stl, it provided the `size()` method to get the size. 
 
-# Pointers and Linked Structures
+## Pointers and Linked Structures ##
 
 *Pointers* are the connections that hold the pieces of linked structures together. Pointers represent the address of a location in memory. 
 
@@ -58,7 +58,7 @@ by lists are *searching*, *insertion*, and *deletion*. In *doubly-linked lists*,
 both to its predecessor and its successor element. This simplifies certain operations
 at a cost of an extra pointer field per node.
 
-## Searching a List ##
+### Searching a List ###
 
 A recursively version of searching a list:
 
@@ -71,7 +71,7 @@ A recursively version of searching a list:
 			return( search_list(l->next, x) );
 	}
 
-## Insertion into a List ##
+### Insertion into a List ###
 
 	void insert_list(list **l, item_type x)
 	{
@@ -82,7 +82,7 @@ A recursively version of searching a list:
 		*l = p;
 	}
 
-## Deletion From a List ##
+### Deletion From a List ###
 
 Find the predecessor of item `x` in list `**l`,
 
