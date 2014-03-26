@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: "Contiguous vs. Linked Data Structures in The Algorithm Design Manual"
