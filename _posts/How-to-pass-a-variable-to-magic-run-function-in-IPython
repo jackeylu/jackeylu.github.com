@@ -1,0 +1,39 @@
+---
+layout: post
+title: "How to pass a variable to magic ´run´ function in IPython"
+categories:
+- Tricks
+- Python
+tags:
+- IPython
+- magic function
+- variable
+
+
+---
+
+IPython 中可以方便地在提供的`%Magic`中使用Python变量，方法就是像Bash-style中用`$`符号将变量名指明。
+
+下面的例子来自于[StackOverflow, How to pass a variable to magic ´run´ function in IPython](http://stackoverflow.com/questions/14409167/how-to-pass-a-variable-to-magic-run-function-in-ipython)
+
+IPython expands variables with $name, bash-style. This is true for all magics, not just %run.
+
+So you would do:
+
+	In [1]: filename = "myscript.py"
+	
+	In [2]: %run $filename
+	['myscript.py']
+
+myscript.py contains:
+
+	import sys
+	print(sys.argv)
+
+Via Python's fancy string formatting, you can even put expressions inside {}:
+
+	In [3]: args = ["arg1", "arg2"]
+	
+	In [4]: %run $filename {args[0]} {args[1][-2:]}
+	['myscript.py', 'arg1', 'g2']
+
