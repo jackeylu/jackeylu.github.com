@@ -1,12 +1,12 @@
 markdown: rdiscount
 permalink: /:title/
 #url: http://jackeylu.com
-url: http://jackeylu.github.io
+url: http://linlyu.com
 img_url: ../assets/images/
-name: jackeylu.github.io
+name: Lin Lyu
 author: Jackey Lyu
 qq: 
-email: lvlin.china@gmail.com
+email: me@linlyu.com
 weibo: 计算士吕林
 github: jackeylu
 pygments: true
