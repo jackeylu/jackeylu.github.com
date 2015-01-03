@@ -8,8 +8,8 @@ author: Jackey Lyu
 qq: 
 email: me@linlyu.com
 weibo: 计算士吕林
+highlighter: pygments
 github: jackeylu
-pygments: true
 safe: true
 paginate: 20
 about: "算法攻城狮一头，目前从事网络规划算法研究，主要做路由、优化、流量控制等算法研究。热爱Linux，开源爱好者，喜欢互联网，SDN，github等。"
