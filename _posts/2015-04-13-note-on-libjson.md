@@ -39,3 +39,5 @@ libjson是以类似Tree的方式来存储json数据的，并且提供一些遍�
 
 最后需要注意的就是解析之前，最好用`libjson::is_valid(json)`方法来检查输入的是否是合法的json数据，否则使用过程中可能会出现异常，
 这一点libjson是不保证的。
+
+如果我们需要验证一个json文件内容是否合法，可以通过网站应用[json lint](http://jsonlint.com/)来验证。
