@@ -25,7 +25,7 @@ public class Finder {
 		// high and low in the first step, are all out of the range of keys,
 		// this help to avoid the comparing of range values.
 		while (high - low > 1) { // DO NOT TRY TO COMPARE THE VALUE OF PROBE FOR LARGE LENGTH.
-			int probe = (low+high) >> 1; // /2 may be integer overflow in same case
+			int probe = low+(high-low) >> 1; // /2 may be integer overflow in same case
 			if	(keys[probe].compareTo(target) > 0 )
 				high = probe;
 			else
