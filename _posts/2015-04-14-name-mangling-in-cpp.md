@@ -120,3 +120,38 @@ test_func(int&, char const*, double, std::string, float)
 ```
 -------------------------------------------------------------------------------------------------
 
+## the extern "C" ## 
+
+`extern`是用来解决mixed-compiler的场景的，除了我们常用的
+
+```c
+#ifdef __cplusplus
+extern "C" int libFunction(int x);
+#else
+int libFunction(int x);
+#endif
+```
+
+来申明C/C++兼容的编译链接方式外，世界上还是有`extern "c++"`这种东东的，见IBM的资料文档[Name mangling (C++ only)](http://www-01.ibm.com/support/knowledgecenter/SSLTBW_2.1.0/com.ibm.zos.v2r1.cbclx01/cplr020.htm)
+
+The extern "C" linkage specifier can also be used to prevent mangling of functions that are defined in C++ so that they can be called from C. For example,
+
+```c
+extern "C" {
+   void p(int){
+      /* not mangled */
+   }
+};
+```
+
+In multiple levels of nested extern declarations, the innermost extern specification prevails.
+
+```c
+extern "C" {
+      extern "C++" {
+            void func();
+      }
+}
+```
+
+In this example, func has C++ linkage.
