@@ -1,4 +1,16 @@
+---
+layout: post
+title: "Notes on Name Mangling in C++"
+categories:
+- programming
+- comipler and linker
+tags:
+- name mangling
+- demangle
+- demangling
 
+
+---
 
 
 # Name Mangling #
@@ -45,6 +57,18 @@ C++的语言特性比C丰富的多，C++支持的函数重载功能是需要Name
 
 
 ## name demangling ##
+
+### 解析规则 ###
+
+Here are few examples of mangled name for g++ compiler:-
+Original name:   void myFun();      Mangled name:  \_Z5myFunv
+Original name:  void myFun(int a, char c);      Mangled name:  \_Z5myFunic
+
+looking at the mangled name we can observe the pattern. The pattern looks like: -
+\_Z numberOfCharsInOriginalFunctionName OriginalFunctionName parameter_names_encoded
+
+
+### C++ ABI __cxa_demangle ###
 
 ```c
     namespace abi { 
