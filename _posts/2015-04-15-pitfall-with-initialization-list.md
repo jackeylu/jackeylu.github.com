@@ -74,6 +74,9 @@ As there can be potentially more than one constructor with
 different orders of attribute initialization the order of destruction wouldn’t be defined. 
 To solve the ambiguity simply the order of declaration is used.
 
+C++编译器按照class内的声明顺序，base class -> class attributes 初始化
+析构的时候逆序
+
 ----------------------------------
 
 to solve this problem, we can modify Bar with
@@ -90,7 +93,7 @@ struct Bar
 
 or
 
-```
+```c++
 struct Bar
 {
     Bar(const Foo &newFoo) : foo(newFoo), fooId(foo.id) {}
