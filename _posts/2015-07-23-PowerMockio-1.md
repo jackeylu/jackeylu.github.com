@@ -28,6 +28,7 @@ PowerMock是Java开发中的一种Mock框架，是基于EasyMock或Mockio的实�
 关于`doReturn().when()` 和`when().thenReturn()`：官方文档中，是建议使用后者的，因为后者能够保证类型安全。
 官方建议在使用后者无效场景下可以使用前者来替代。
 但是实际上两者在执行mockedMethod时是有很大区别的。
+
 1. `doReturn(value).when()` 在执行 mockedMethod 时，会匹配方法和参数是否与`when()`内设置的相同，
 如果相同，该mock实现将**不执行mockedMethod**，而直接返回预设的返回值`value`。
 2. 而`when().thenReturn(value)`则是会先**执行 mockedMethod**，然后不论执行结果是怎样，都会返回`value`。
