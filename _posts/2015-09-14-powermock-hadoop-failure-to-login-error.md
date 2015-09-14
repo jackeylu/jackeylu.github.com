@@ -22,51 +22,51 @@ It is so sad that, we may occur with the exception on hadoop IOException
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 java.io.IOException: failure to login
-	at org.apache.hadoop.security.UserGroupInformation$HadoopLoginModule.commit(UserGroupInformation.java:209)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:606)
-	at javax.security.auth.login.LoginContext.invoke(LoginContext.java:762)
-	at javax.security.auth.login.LoginContext.access$000(LoginContext.java:203)
-	at javax.security.auth.login.LoginContext$4.run(LoginContext.java:690)
-	at javax.security.auth.login.LoginContext$4.run(LoginContext.java:688)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.login.LoginContext.invokePriv(LoginContext.java:687)
-	at javax.security.auth.login.LoginContext.login(LoginContext.java:596)
-	at org.apache.hadoop.security.UserGroupInformation.loginUserFromSubject(UserGroupInformation.java:798)
-	at org.apache.hadoop.security.UserGroupInformation.getLoginUser(UserGroupInformation.java:760)
-	at org.apache.hadoop.security.UserGroupInformation.getCurrentUser(UserGroupInformation.java:633)
-	at org.apache.hadoop.fs.FileSystem$Cache$Key.<init>(FileSystem.java:2812)
-	at org.apache.hadoop.fs.FileSystem$Cache$Key.<init>(FileSystem.java:2802)
-	at org.apache.hadoop.fs.FileSystem$Cache.get(FileSystem.java:2668)
-	at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:371)
-	at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:170)
-	at com.tencent.ieg.spectrum.TaskLocalInfo.createParquetWriter(TaskLocalInfo.java:291)
-	at com.tencent.ieg.spectrum.EventProcessor.convertAndWrite(EventProcessor.java:423)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:606)
-	at org.powermock.api.mockito.internal.invocation.MockitoMethodInvocationControl$1.invoke(MockitoMethodInvocationControl.java:240)
-	at org.mockito.internal.invocation.realmethod.CleanTraceRealMethod.invoke(CleanTraceRealMethod.java:30)
-	at org.mockito.internal.invocation.InvocationImpl.callRealMethod(InvocationImpl.java:112)
-	at org.mockito.internal.stubbing.answers.CallsRealMethods.answer(CallsRealMethods.java:41)
-	at org.mockito.internal.handler.MockHandlerImpl.handle(MockHandlerImpl.java:93)
-	at org.powermock.api.mockito.internal.invocation.MockitoMethodInvocationControl.performIntercept(MockitoMethodInvocationControl.java:262)
-	at org.powermock.api.mockito.internal.invocation.MockitoMethodInvocationControl.invoke(MockitoMethodInvocationControl.java:190)
-	at org.powermock.core.MockGateway.doMethodCall(MockGateway.java:124)
-	at org.powermock.core.MockGateway.methodCall(MockGateway.java:185)
-	at com.tencent.ieg.spectrum.EventProcessor.convertAndWrite(EventProcessor.java)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:606)
-	at org.powermock.reflect.internal.WhiteboxImpl.performMethodInvocation(WhiteboxImpl.java:1873)
-	at org.powermock.reflect.internal.WhiteboxImpl.doInvokeMethod(WhiteboxImpl.java:773)
-	at org.powermock.reflect.internal.WhiteboxImpl.invokeMethod(WhiteboxImpl.java:638)
-	at org.powermock.reflect.Whitebox.invokeMethod(Whitebox.java:401)
-	at com.tencent.ieg.spectrum.EventProcessorTest.testConvertAndWriteWithEmptyData(EventProcessorTest.java:391)
+    at org.apache.hadoop.security.UserGroupInformation$HadoopLoginModule.commit(UserGroupInformation.java:209)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:606)
+    at javax.security.auth.login.LoginContext.invoke(LoginContext.java:762)
+    at javax.security.auth.login.LoginContext.access$000(LoginContext.java:203)
+    at javax.security.auth.login.LoginContext$4.run(LoginContext.java:690)
+    at javax.security.auth.login.LoginContext$4.run(LoginContext.java:688)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at javax.security.auth.login.LoginContext.invokePriv(LoginContext.java:687)
+    at javax.security.auth.login.LoginContext.login(LoginContext.java:596)
+    at org.apache.hadoop.security.UserGroupInformation.loginUserFromSubject(UserGroupInformation.java:798)
+    at org.apache.hadoop.security.UserGroupInformation.getLoginUser(UserGroupInformation.java:760)
+    at org.apache.hadoop.security.UserGroupInformation.getCurrentUser(UserGroupInformation.java:633)
+    at org.apache.hadoop.fs.FileSystem$Cache$Key.<init>(FileSystem.java:2812)
+    at org.apache.hadoop.fs.FileSystem$Cache$Key.<init>(FileSystem.java:2802)
+    at org.apache.hadoop.fs.FileSystem$Cache.get(FileSystem.java:2668)
+    at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:371)
+    at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:170)
+    at com.tencent.ieg.spectrum.TaskLocalInfo.createParquetWriter(TaskLocalInfo.java:291)
+    at com.tencent.ieg.spectrum.EventProcessor.convertAndWrite(EventProcessor.java:423)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:606)
+    at org.powermock.api.mockito.internal.invocation.MockitoMethodInvocationControl$1.invoke(MockitoMethodInvocationControl.java:240)
+    at org.mockito.internal.invocation.realmethod.CleanTraceRealMethod.invoke(CleanTraceRealMethod.java:30)
+    at org.mockito.internal.invocation.InvocationImpl.callRealMethod(InvocationImpl.java:112)
+    at org.mockito.internal.stubbing.answers.CallsRealMethods.answer(CallsRealMethods.java:41)
+    at org.mockito.internal.handler.MockHandlerImpl.handle(MockHandlerImpl.java:93)
+    at org.powermock.api.mockito.internal.invocation.MockitoMethodInvocationControl.performIntercept(MockitoMethodInvocationControl.java:262)
+    at org.powermock.api.mockito.internal.invocation.MockitoMethodInvocationControl.invoke(MockitoMethodInvocationControl.java:190)
+    at org.powermock.core.MockGateway.doMethodCall(MockGateway.java:124)
+    at org.powermock.core.MockGateway.methodCall(MockGateway.java:185)
+    at com.tencent.ieg.spectrum.EventProcessor.convertAndWrite(EventProcessor.java)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:606)
+    at org.powermock.reflect.internal.WhiteboxImpl.performMethodInvocation(WhiteboxImpl.java:1873)
+    at org.powermock.reflect.internal.WhiteboxImpl.doInvokeMethod(WhiteboxImpl.java:773)
+    at org.powermock.reflect.internal.WhiteboxImpl.invokeMethod(WhiteboxImpl.java:638)
+    at org.powermock.reflect.Whitebox.invokeMethod(Whitebox.java:401)
+    at com.tencent.ieg.spectrum.EventProcessorTest.testConvertAndWriteWithEmptyData(EventProcessorTest.java:391)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -104,3 +104,16 @@ System.setProperty("HADOOP_USER_NAME","something-you-like");
  
 
 OK, it is solved in my case, I choose the second one.
+
+ 
+
+ 
+
+Reference
+=========
+
+ 
+
+If you use Spark, you also may meet with this problem, see the solution,
+
+http://stackoverflow.com/questions/31534458/failing-integration-test-for-apache-spark-streaming
