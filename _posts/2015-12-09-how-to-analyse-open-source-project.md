@@ -126,6 +126,10 @@ Exception in thread "Flume Thrift IPC Thread 14470" java.lang.OutOfMemoryError: 
 
 找到原因后，我们增加了配置参数，设定了线程数为合理的数值，后面测试就没有发现这个问题。
 
+总结：事后，我们分析发现，纯粹从使用者角度来使用flume的[thrift source](https://flume.apache.org/FlumeUserGuide.html#thrift-source)时，
+根据官方手册，并没有指明`threads`参数是`required`类型，包括示例配置都没有配`threads`参数，因此用户默认不配置是常见的。为此，我们从用户体验角度，
+给flume提交了一个patch，建议将用户没有设置该参数时的默认值从0改成5.
+
 工具介绍
 =============
 
