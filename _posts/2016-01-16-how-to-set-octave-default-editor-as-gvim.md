@@ -9,9 +9,10 @@ In the octaverc or .octaverc file, add such command,
 
 ```
 ## set the default editor as vim
-EDITOR("/path/to/your/vim --servername ocatve-editor --remote-tab-silent %s"
+EDITOR("/path/to/your/vim --servername octave-editor --remote-tab-silent %s"
 ```
 
-You NEED TO SET THE ABSOLUTE PATH IN WINDOWS, to create the right child process.
+1. You NEED TO SET THE ABSOLUTE PATH IN WINDOWS, to create the right child process.
+2. You should be carefull on the os.path.sep
 
 
