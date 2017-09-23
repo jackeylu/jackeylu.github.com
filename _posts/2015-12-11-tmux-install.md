@@ -1,5 +1,6 @@
-Tips on Installation of [Tmux](https://github.com/tmux/tmux)
-=================
+---
+title: Tips on Installation of [Tmux](https://github.com/tmux/tmux)
+---
 
 
 
